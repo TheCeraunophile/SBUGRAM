@@ -1,9 +1,6 @@
-package ResivedMessages;
+package Messages.ResivedMessages;
 
-import InformationToShow.Post;
-import InformationToShow.User;
-
-import javax.annotation.processing.Messager;
+import Messages.InformationToShow.*;
 import java.io.Serializable;
 
 public class DissLikeMessage implements ResivedMessage , Serializable {

@@ -1,6 +1,6 @@
-package ResivedMessages;
-import DataCenter.Databace;
-import InformationToShow.User;
+package Messages.ResivedMessages;
+import Server.Databace;
+import Messages.InformationToShow.User;
 
 import java.io.Serializable;
 import java.util.ArrayList;

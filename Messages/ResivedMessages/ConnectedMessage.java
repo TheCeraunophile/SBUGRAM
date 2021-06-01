@@ -1,6 +1,6 @@
 package Messages.ResivedMessages;
-import DataCenter.Databace;
-import InformationToShow.User;
+import Server.Databace;
+import Messages.InformationToShow.User;
 import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;

@@ -1,4 +1,4 @@
-package Exceptions;
+package Messages.Exceptions;
 
 public class UsernameDontValid extends Exception{
     public UsernameDontValid(String describe){

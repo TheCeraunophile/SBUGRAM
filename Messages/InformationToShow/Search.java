@@ -1,6 +1,5 @@
-package InformationToShow;
-import DataCenter.Databace;
-
+package Messages.InformationToShow;
+import Server.Databace;
 import java.util.List;
 import java.util.stream.Collectors;
 

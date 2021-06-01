@@ -1,5 +1,5 @@
-package ResivedMessages;
-import InformationToShow.User;
+package Messages.ResivedMessages;
+import Messages.InformationToShow.User;
 
 import java.io.Serializable;
 

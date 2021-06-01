@@ -1,5 +1,5 @@
-package ResivedMessages;
-import ThrowedMessage.*;
+package Messages.ResivedMessages;
+import Messages.ThrowedMessage.*;
 
 import java.io.Serializable;
 

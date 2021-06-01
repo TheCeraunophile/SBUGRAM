@@ -1,8 +1,7 @@
-package ResivedMessages;
-import DataCenter.Databace;
-import Exceptions.UsernameDontValid;
-import InformationToShow.User;
-
+package Messages.ResivedMessages;
+import Server.Databace;
+import Messages.Exceptions.*;
+import Messages.InformationToShow.*;
 import java.io.Serializable;
 import java.util.Date;
 

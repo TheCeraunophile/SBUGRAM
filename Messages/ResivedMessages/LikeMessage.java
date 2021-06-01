@@ -1,7 +1,6 @@
-package ResivedMessages;
-import DataCenter.Databace;
-import InformationToShow.Post;
-import InformationToShow.User;
+package Messages.ResivedMessages;
+import Server.Databace;
+import Messages.InformationToShow.*;
 import java.io.Serializable;
 
 public class LikeMessage implements ResivedMessage , Serializable {
