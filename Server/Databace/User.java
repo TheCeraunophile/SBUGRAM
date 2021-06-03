@@ -1,4 +1,5 @@
-package Messages.InformationToShow;
+package Server.Databace;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,6 +32,10 @@ public class User implements Serializable {
         return postList;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
     public String getPassword() {
         return password;
     }
@@ -54,10 +59,6 @@ public class User implements Serializable {
         this.bio=bio;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
     @Override
     public boolean equals(Object obj){
         User temp ;
@@ -71,5 +72,11 @@ public class User implements Serializable {
         if (!this.username.equals(temp.username))
             return false;
         return true;
+    }
+
+    @Override
+    public int hashCode(){
+        int result = 17;
+        return  result*31*password.hashCode();
     }
 }

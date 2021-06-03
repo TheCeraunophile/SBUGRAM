@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ListView layoutX="152.0" layoutY="135.0" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" prefHeight="465.0" prefWidth="444.0" />
+      <Button layoutX="54.0" layoutY="312.0" mnemonicParsing="false" text="LogOut" />
+      <Button layoutX="58.0" layoutY="265.0" mnemonicParsing="false" text="Home" />
+      <Button layoutX="58.0" layoutY="219.0" mnemonicParsing="false" text="Direct" />
+      <Button layoutX="58.0" layoutY="169.0" mnemonicParsing="false" text="Profile" />
+      <TextField layoutX="607.0" layoutY="55.0" promptText="search" />
+      <CheckBox layoutX="797.0" layoutY="59.0" mnemonicParsing="false" text="start" />
+      <Button layoutX="54.0" layoutY="368.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="65.0" text="WritePost" />
+      <TextField editable="false" layoutX="152.0" layoutY="97.0" prefHeight="25.0" prefWidth="86.0" text="Followers" />
+      <TextField editable="false" layoutX="267.0" layoutY="97.0" prefHeight="25.0" prefWidth="79.0" text="Following" />
+   </children>
+</Pane>

@@ -1,4 +1,5 @@
-package Messages.InformationToShow;
+package Server.Databace;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
