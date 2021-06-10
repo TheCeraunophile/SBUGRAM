@@ -1,5 +1,4 @@
 package Server;
-import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -10,24 +9,43 @@ import Messages.Requests.*;
 import Server.Databace.Databace;
 
 public class Server {
-    public static void main(String[] args) {
+    static Integer numberOfConnectedClients = 0;
+    public static void main(String[] args) throws IOException {
+        ServerSocket serverSocket = new ServerSocket(8080);
         Databace.getInstance().init();
         while (true){
-            try {
-                ServerSocket serverSocket = new ServerSocket(8080);
                 Socket user = serverSocket.accept();
                 ObjectOutputStream oos = new ObjectOutputStream(user.getOutputStream());
                 ObjectInputStream ois = new ObjectInputStream(user.getInputStream());
+                timeOfPush("plus");
                 new ClientHandler(oos,ois).start();
-            } catch (IOException e) {
+        }
+    }
+
+    public synchronized static void timeOfPush(String sign){
+        Integer integer = Server.numberOfConnectedClients;
+        if (sign.equalsIgnoreCase("plus")) {
+            try {
+                Server.class.getDeclaredField("numberOfConnectedClients").set(integer, integer + 1);
+            } catch (IllegalAccessException | NoSuchFieldException e) {
                 e.printStackTrace();
             }
         }
+        else {
+            try {
+                Server.class.getDeclaredField("numberOfConnectedClients").set(integer, integer - 1);
+            } catch (IllegalAccessException | NoSuchFieldException e) {
+                e.printStackTrace();
+            }
+        }
+//        if (Server.numberOfConnectedClients < 1)
+//            Databace.getInstance().pushingData();
     }
+
 }
 class ClientHandler extends Thread {
-    private final ObjectInputStream ois ;
-    private final ObjectOutputStream oos;
+    private ObjectInputStream ois ;
+    private ObjectOutputStream oos;
     public ClientHandler(ObjectOutputStream oos,ObjectInputStream ois){
         this.oos=oos;
         this.ois=ois;
@@ -39,73 +57,128 @@ class ClientHandler extends Thread {
                 Object message = ois.readObject();
                 String type = message.getClass().getSimpleName();
                 if (type.equals(Disconnect.class.getSimpleName())){
-                    var a = (Disconnect)message;
                     oos.close();
                     ois.close();
-                    Databace.getInstance().writeDatabace();
+                    Server.timeOfPush("minus");
                     break;
                 }
                 switch (type) {
+                    case "Connect" -> {
+                        checkDetailsOfClients(message,"connect");
+                    }
+                    case "CreatingAccount" -> {
+                        checkDetailsOfClients(message,"creatingaccount");
+                    }
+                    case "DelitingAccount" -> {
+                        checkDetailsOfClients(message,"deletingAccount");
+                    }
                     case "DirectMessage" -> {
                         var a = (DirectMessage) message;
-                        a.getSender().updateDirectMessage(a.getRisived(),a.getTextMessage());
-                        a.getRisived().updateDirectMessage(a.getSender(),a.getTextMessage());
-                    }
-                    case "ConnectedMessage" -> {
-                        var a = (Connect) message;
-
-                        /**
-                          this sent response of client to the that ,
-                          if buoth of username and password are valid if statement sent correct User
-                          or Don't sent null
-                          */
-
-                        if(
-                            Databace.getInstance().cache.containsKey(a.getUsername())
-                            &
-                            Databace.getInstance().cache.get(a.getUsername()).getPassword().equals(a.getPassword())
-                        ){
-                            sendingUser(Databace.getInstance().cache.get(a.getUsername()));
-                        }else {
-                            sendingUser(null);
-                        }
-                    }
-                    case "LikeOrDislikeMessage" -> {
-                        var a = (LikeOrDislikeMessage) message;
-                        if (a.getGread()==0)
-                            a.getResived().getPostList().get(a.getResived().getPostList().indexOf(a.getPost())).updateDisLike();
-                        else
-                            a.getResived().getPostList().get(a.getResived().getPostList().indexOf(a.getPost())).updateLike();
-                    }
-                    case "NewUserMessage" -> {
-                        var a = (CreatingAccount) message;
-                        if(!Databace.getInstance().cache.containsKey(a.getUsername())){
-                            User user = new User(a.getUsername(),a.getPassword(),a.getBirthdayDate(),a.getBio());
-                            Databace.getInstance().cache.put(a.getUsername(),user);
-
-                        }
+                        Databace.getInstance().cache.get(a.getSender().getUsername()).updateDirectMessage(a.getRisived(),a.getTextMessage());
+                        Databace.getInstance().cache.get(a.getRisived().getUsername()).updateDirectMessage(a.getSender(),a.getTextMessage());
                     }
                     case "PostMessage" -> {
                         var a = (PostMessage) message;
-                        a.getSender().updatePost(a.getText());
+                        Databace.getInstance().cache.get(a.getSender().getUsername()).updatePost(a.getText());
                     }
                     case "Refresh" -> {
                         var a = (Refresh) message;
                         sendingUser(Databace.getInstance().cache.get(a.getUsername()));
+                    }
+                    case "LikeOrDislikeMessage" -> {
+                        var a = (LikeOrDislikeMessage) message;
+                        if (a.getGread()==0)
+                            Databace.getInstance().cache.get
+                                    (a.getResived().getUsername()).getPostList()
+                                    .get(Databace.getInstance().cache
+                                            .get(a.getResived().getUsername()).getPostList().indexOf(a.getPost()))
+                                    .updateDisLike();
+                        else
+                            Databace.getInstance().cache.get
+                                    (a.getResived().getUsername()).getPostList()
+                                    .get(Databace.getInstance().cache
+                                            .get(a.getResived().getUsername()).getPostList().indexOf(a.getPost()))
+                                    .updateLike();
+
                     }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+        System.out.println("end");
     }
 
     private void sendingUser(User user){
-        try {
-            this.oos.writeObject(user);
-            this.oos.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (user!=null) {
+            try {
+                if (user.getClass().getSimpleName().equals("User")) {
+                    String security = user.getPassword();
+                    user.setPassword(null);
+                    this.oos.writeObject(user);
+                    this.oos.flush();
+                    user.setPassword(security);
+                }
+                this.oos.writeObject(user);
+                this.oos.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            try {
+                this.oos.writeObject(user);
+                this.oos.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void checkDetailsOfClients(Object user,String status){
+        String username=null;
+        String password=null;
+        String bio = null;
+
+        if (user.getClass().getSimpleName().equalsIgnoreCase("CreatingAccount")){
+            var a = (CreatingAccount)user;
+            username = a.getUsername();
+            password = a.getPassword();
+            bio = a.getUsername();
+        }
+        if (user.getClass().getSimpleName().equalsIgnoreCase("Connect")){
+            var a = (Connect)user;
+            username = a.getUsername();
+            password = a.getPassword();
+        }
+        if (user.getClass().getSimpleName().equalsIgnoreCase("DelitingAccount")){
+            assert user instanceof DelitingAccount;
+            var a = (DelitingAccount)user;
+            username = a.getUsername();
+            password = a.getPassword();
+        }
+        boolean detailsIsValid = false;
+        if (Databace.getInstance().cache.containsKey(username)) {
+            if (Databace.getInstance().cache.get(username).getPassword().equals(password)) {
+                if (status.equalsIgnoreCase("connect")) {
+                    sendingUser(Databace.getInstance().cache.get(username));
+                    detailsIsValid=true;
+                }
+                if (status.equalsIgnoreCase("deletingAccount")){
+                    Databace.getInstance().cache.remove(username);
+                    sendingUser(new User(null,null,null,null));
+                    detailsIsValid=true;
+                }
+            }
+        }
+        else {
+            if (status.equalsIgnoreCase("CreatingAccount")) {
+                User newUser = new User(username, password, null, bio);
+                Databace.getInstance().cache.put(username, newUser);
+                sendingUser(newUser);
+            }else {
+                sendingUser(null);
+            }
         }
     }
 }
