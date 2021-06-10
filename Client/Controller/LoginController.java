@@ -1,16 +1,20 @@
 package Client.Controller;
-
+import Server.Databace.User;
 import Client.Model.PageLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import Messages.Requests.*;
 import java.io.IOException;
-import java.util.Date;
+import Client.Model.DetailsOfClient;
 
-public class LoginController {
+public class LoginController{
+
     private String password;
     private String username;
+
+    public TextField show_password;
     public TextField username_field;
     public Button login_button;
     public Button Signup_button;
@@ -18,7 +22,7 @@ public class LoginController {
     public TextField year_test;
     public TextField month_test;
     public TextField day_test;
-    public TextField bio_field;
+    public TextArea bio_field;
     public TextField password_field;
     public TextField name_hellp;
     public TextField broken_pass;
@@ -43,13 +47,43 @@ public class LoginController {
         month_test.setVisible(false);
         year_test.setVisible(false);
 
+        boolean connectionIsValid = false;
         if (!username_field.getText().equals("") & !password_field.getText().equals("")){
-            this.password=password_field.getText();
-            this.username_field.getText();
+            this.password = password_field.getText();
+            username=username_field.getText();
+            DetailsOfClient.init();
+            DetailsOfClient.setUsername(username);
             Connect packet = new Connect(username,password);
-//            oos.writeobject(packet);
-//            ois.readObject();
-            nextPage();
+            try {
+                DetailsOfClient.oos.writeObject(packet);
+                DetailsOfClient.oos.flush();
+                var answer = DetailsOfClient.ois.readObject();
+                if (answer==null){
+                    System.out.println("this username not available :/");
+                }else {
+                    DetailsOfClient.setProfile((User)answer);
+                    connectionIsValid=true;
+                }
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+                System.out.println(e.getMessage());
+            }
+            if (connectionIsValid) {
+                nextPage();
+            }else {
+                try {
+                    password_field.setText("");
+                    username_field.setText("");
+                    day_birthday.setText("");
+                    year_test.setText("");
+                    month_test.setText("");
+                    show_password.setText("");
+                    bio_field.setText("");
+                    new PageLoader().load("Login");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -75,12 +109,42 @@ public class LoginController {
                 &
                 !bio_field.getText().equals("")
         ){
+            boolean connectionIsValid = false;
             this.password=password_field.getText();
-            this.username_field.getText();
+            this.username= username_field.getText();
+
             CreatingAccount packet = new CreatingAccount(username,password,null,bio_field.getText());
-//            oos.writeobject(packet);
-//            ois.readObject();
-            nextPage();
+            try {
+                DetailsOfClient.init();
+                DetailsOfClient.setUsername(username);
+                DetailsOfClient.oos.writeObject(packet);
+                DetailsOfClient.oos.flush();
+                var answer = DetailsOfClient.ois.readObject();
+                if (answer==null){
+                    System.out.println("one username already exist");
+                }else {
+                    DetailsOfClient.setProfile((User)answer);
+                    connectionIsValid=true;
+                }
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            if (connectionIsValid) {
+                nextPage();
+            }else {
+                try {
+                    password_field.setText("");
+                    username_field.setText("");
+                    day_birthday.setText("");
+                    year_test.setText("");
+                    month_test.setText("");
+                    show_password.setText("");
+                    bio_field.setText("");
+                    new PageLoader().load("Login");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -99,15 +163,26 @@ public class LoginController {
         day_birthday.setVisible(true);
     }
 
-    public void save_signup(){
-
-    }
-
     public void showPassword(){
-
+        if (password_field.isVisible()){
+            password_field.setVisible(false);
+            show_password.setVisible(true);
+            show_password.setText(password_field.getText());
+        }else {
+            show_password.setVisible(false);
+            password_field.setVisible(true);
+            password_field.setText(show_password.getText());
+        }
     }
     public void nextPage(){
         try {
+            password_field.setText("");
+            username_field.setText("");
+            day_birthday.setText("");
+            year_test.setText("");
+            month_test.setText("");
+            show_password.setText("");
+            bio_field.setText("");
             new PageLoader().load("TimeLine");
         } catch (IOException e) {
             e.printStackTrace();

@@ -23,15 +23,16 @@
             <Button fx:id="Signup_button" layoutX="372.0" layoutY="492.0" mnemonicParsing="false" onAction="#signup" prefHeight="25.0" prefWidth="95.0" text="Signup" />
             <Button fx:id="needhelp_button" layoutX="372.0" layoutY="525.0" mnemonicParsing="false" onAction="#needhellp" prefHeight="25.0" prefWidth="95.0" text="need help" />
             <TextField fx:id="username_field" layoutX="334.0" layoutY="158.0" promptText="username" />
-            <TextField fx:id="year_test" layoutX="334.0" layoutY="237.0" prefHeight="25.0" prefWidth="65.0" promptText="YY" visible="false" />
-            <TextField fx:id="month_test" layoutX="404.0" layoutY="237.0" prefHeight="25.0" prefWidth="46.0" promptText="MM" visible="false" />
-            <TextField fx:id="day_test" layoutX="458.0" layoutY="237.0" prefHeight="25.0" prefWidth="46.0" promptText="DD" visible="false" />
-            <TextField fx:id="bio_field" layoutX="334.0" layoutY="275.0" prefHeight="90.0" prefWidth="170.0" promptText="Bio" visible="false" />
+            <TextField fx:id="year_test" layoutX="334.0" layoutY="356.0" prefHeight="25.0" prefWidth="65.0" promptText="YY" />
+            <TextField fx:id="month_test" layoutX="404.0" layoutY="356.0" prefHeight="25.0" prefWidth="46.0" promptText="MM" />
+            <TextField fx:id="day_test" layoutX="458.0" layoutY="356.0" prefHeight="25.0" prefWidth="46.0" promptText="DD" />
             <CheckBox layoutX="702.0" layoutY="232.0" mnemonicParsing="false" text="show" visible="false" />
             <TextField fx:id="name_hellp" layoutX="14.0" layoutY="158.0" prefHeight="25.0" prefWidth="230.0" promptText="write your name" visible="false" />
             <TextField fx:id="broken_pass" layoutX="14.0" layoutY="194.0" prefHeight="25.0" prefWidth="230.0" promptText="write some of your password" visible="false" />
             <TextField fx:id="day_birthday" layoutX="14.0" layoutY="228.0" prefHeight="25.0" prefWidth="230.0" promptText="write number of day birthday" visible="false" />
             <PasswordField fx:id="password_field" layoutX="334.0" layoutY="194.0" promptText="password" />
+            <TextArea fx:id="bio_field" layoutX="334.0" layoutY="232.0" prefHeight="107.0" prefWidth="170.0" promptText="bio" />
+            <TextField fx:id="show_password" editable="false" layoutX="334.0" layoutY="194.0" visible="false" />
          </children>
       </Pane>
    </children>
