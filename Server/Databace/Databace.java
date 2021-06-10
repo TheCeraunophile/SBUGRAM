@@ -5,7 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Databace {
     private  ObjectOutputStream oos;
     private  ObjectInputStream ois;
-    public ConcurrentHashMap<String,User> cache = null;
+    public ConcurrentHashMap<String, User> cache = null;
     private static final Databace databace = new Databace();
 
     public void init(){
@@ -22,7 +22,7 @@ public class Databace {
         }
     }
 
-    public void writeDatabace(){
+    public void pushingData(){
         try {
             oos.writeObject(cache);
             oos.flush();

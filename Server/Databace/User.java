@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 public class User implements Serializable {
     private String username;
-    private transient String password;
+    private String password;
     private Date birthdayDate;
     private String bio;
     private ArrayList<Post> postList;
@@ -38,6 +38,10 @@ public class User implements Serializable {
 
     public String getPassword() {
         return password;
+    }
+
+    public void setPassword(String password){
+        this.password=password;
     }
 
     public void updateDirectMessage(User up, String textMessage){
