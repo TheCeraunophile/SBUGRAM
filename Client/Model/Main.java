@@ -1,8 +1,10 @@
 package Client.Model;
 
+import Messages.Requests.Disconnect;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 public class Main extends Application {
 
     @Override
@@ -12,6 +14,18 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
+        DetailsOfClient.init();
         launch(args);
+
+        if (DetailsOfClient.getUsername()!=null) {
+            Disconnect disconnect = new Disconnect(DetailsOfClient.getUsername());
+            try {
+                DetailsOfClient.oos.writeObject(disconnect);
+                DetailsOfClient.oos.flush();
+                DetailsOfClient.closingSrc();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

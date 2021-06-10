@@ -18,10 +18,8 @@ public class TimeLineController{
             Disconnect disconnect = new Disconnect(DetailsOfClient.getUsername());
             DetailsOfClient.oos.writeObject(disconnect);
             DetailsOfClient.oos.flush();
-//            DetailsOfClient.oos.close();
-//            DetailsOfClient.ois.close();
-            DetailsOfClient.setProfile(null);
-            DetailsOfClient.setUsername("");
+            DetailsOfClient.closingSrc();
+            DetailsOfClient.init();
             new PageLoader().load("Login");
         } catch (IOException e) {
             e.printStackTrace();

@@ -10,7 +10,6 @@ public class DetailsOfClient {
     public static ObjectOutputStream oos;
     public static ObjectInputStream ois;
     public static Socket socket;
-    private static final String defultName = "newUser";
     public static User profile;
     private static String username;
     private DetailsOfClient(){}
@@ -38,5 +37,17 @@ public class DetailsOfClient {
 
     public static User getProfile() {
         return profile;
+    }
+
+    public static void closingSrc(){
+        try {
+            oos.close();
+            ois.close();
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        profile=null;
+        username=null;
     }
 }

@@ -51,8 +51,6 @@ public class LoginController{
         if (!username_field.getText().equals("") & !password_field.getText().equals("")){
             this.password = password_field.getText();
             username=username_field.getText();
-            DetailsOfClient.init();
-            DetailsOfClient.setUsername(username);
             Connect packet = new Connect(username,password);
             try {
                 DetailsOfClient.oos.writeObject(packet);
@@ -62,6 +60,7 @@ public class LoginController{
                     System.out.println("this username not available :/");
                 }else {
                     DetailsOfClient.setProfile((User)answer);
+                    DetailsOfClient.setUsername(username);
                     connectionIsValid=true;
                 }
             } catch (IOException | ClassNotFoundException e) {
@@ -115,8 +114,6 @@ public class LoginController{
 
             CreatingAccount packet = new CreatingAccount(username,password,null,bio_field.getText());
             try {
-                DetailsOfClient.init();
-                DetailsOfClient.setUsername(username);
                 DetailsOfClient.oos.writeObject(packet);
                 DetailsOfClient.oos.flush();
                 var answer = DetailsOfClient.ois.readObject();
@@ -124,6 +121,7 @@ public class LoginController{
                     System.out.println("one username already exist");
                 }else {
                     DetailsOfClient.setProfile((User)answer);
+                    DetailsOfClient.setUsername(username);
                     connectionIsValid=true;
                 }
             } catch (IOException | ClassNotFoundException e) {
