@@ -169,6 +169,13 @@ class ClientHandler extends Thread {
                     sendingUser(new User(null,null,null,null));
                     detailsIsValid=true;
                 }
+                if (status.equalsIgnoreCase("CreatingAccount")){
+                    sendingUser(null); //means one person already used of this username and password OMG
+                }
+            }else {
+                sendingUser(null); //means one person already used of this username or
+                                   //hwo want to clear it's account given wrong password or
+                                   //hwo want to connect to the server given wrong password
             }
         }
         else {
@@ -177,7 +184,8 @@ class ClientHandler extends Thread {
                 Databace.getInstance().cache.put(username, newUser);
                 sendingUser(newUser);
             }else {
-                sendingUser(null);
+                sendingUser(null); //hwo want to clear it's account given wrong username or
+                                   //hwo want to connect to the server given wrong username
             }
         }
     }
