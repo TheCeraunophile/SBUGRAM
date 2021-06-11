@@ -29,4 +29,12 @@ public class Post implements Serializable {
     public void updateLike(){
         like++;
     }
+
+    public String getText() {
+        return text;
+    }
+
+    public User getSender() {
+        return sender;
+    }
 }
