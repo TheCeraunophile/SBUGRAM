@@ -4,9 +4,9 @@ public class CompeerMessage {
     private final User sender;
     private final CompeerType compeerType;
     private final User receiver ;
-    public CompeerMessage(User user,User receiver,CompeerType compeerType){
+    public CompeerMessage(User sender,User receiver,CompeerType compeerType){
         this.receiver=receiver;
-        this.sender =user;
+        this.sender =sender;
         this.compeerType=compeerType;
     }
 

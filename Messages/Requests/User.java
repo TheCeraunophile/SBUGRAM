@@ -57,7 +57,7 @@ public class User implements Serializable {
     }
 
     public void updateFollower(User user, CompeerType type){
-        if (type==CompeerType.FOLLOW){
+        if (type==CompeerType.UNFOLLOW){
             if (!follower.contains(user)){
                 follower.add(user);
             }
@@ -74,6 +74,14 @@ public class User implements Serializable {
         }else {
             following.remove(user);
         }
+    }
+
+    public ArrayList<User> getFollower() {
+        return follower;
+    }
+
+    public ArrayList<User> getFollowing() {
+        return following;
     }
 
     @Override
