@@ -3,14 +3,14 @@ import Client.Model.DetailsOfClient;
 import Client.Model.PageLoader;
 import Messages.Requests.Disconnect;
 import Messages.Requests.Post;
-import Messages.Requests.Refresh;
-import Messages.Requests.User;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class TimeLineController{
 
@@ -20,10 +20,21 @@ public class TimeLineController{
     public Button profile;
     public Button writPost;
     public ListView<Post> ListView;
+    private ArrayList<Post> timeLine = new ArrayList<>();
 
     @FXML
     public void initialize() {
-        ListView.setItems(FXCollections.observableArrayList(DetailsOfClient.getProfile().getPostList()));
+        try {
+            System.out.println(DetailsOfClient.getProfile().getUsername());
+            System.out.println(DetailsOfClient.getProfile().getPassword());
+            for (int i=0;i<DetailsOfClient.profile.getPostList().size();i++){
+                System.out.println(DetailsOfClient.getProfile().getPostList().get(i).getText());
+            }
+        }catch (Exception e){}
+        for (int i=0;i<DetailsOfClient.profile.getFollowing().size();i++){
+            timeLine.addAll(DetailsOfClient.getProfile().getFollowing().get(i).getPostList());
+        }
+        ListView.setItems(FXCollections.observableArrayList(timeLine));
         ListView.setCellFactory(ListView -> new PostItem());
     }
 
@@ -50,16 +61,6 @@ public class TimeLineController{
 
     public void home(){
         try {
-            DetailsOfClient.oos.writeObject(new Refresh(DetailsOfClient.getUsername()));
-            DetailsOfClient.oos.flush();
-            var answer = DetailsOfClient.ois.readObject();
-            DetailsOfClient.setProfile((User) answer);
-        }catch (ClassNotFoundException e){
-            e.getStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
             new PageLoader().load("TimeLine");
         } catch (IOException e) {
             e.printStackTrace();
@@ -71,6 +72,17 @@ public class TimeLineController{
     }
 
     public void profile(){
+        try {
+            new PageLoader().load("Profile");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
+    public void showPost(MouseEvent mouseEvent) {
+        Post p = ListView.getSelectionModel().getSelectedItem();
+        if (p != null) {
+            DetailsOfClient.setTarget(p.getSender());
+        }
     }
 }
