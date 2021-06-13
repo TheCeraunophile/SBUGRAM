@@ -4,16 +4,16 @@ import java.io.Serializable;
 
 public class PostMessage implements Serializable {
 
-    private final User sender;
+    private final String usernameSender;
     private final String text;
 
-    public PostMessage(User sender, String text) {
-        this.sender = sender;
+    public PostMessage(String usernameSender, String text) {
+        this.usernameSender = usernameSender;
         this.text = text;
     }
 
-    public User getSender() {
-        return sender;
+    public String getUsernameSender() {
+        return usernameSender;
     }
 
     public String getText() {

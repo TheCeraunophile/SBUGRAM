@@ -22,7 +22,7 @@ public class AddPostController {
                 title of every post handled by only one new line
                 title in not necessary for every post
             */
-            PostMessage postMessage = new PostMessage(DetailsOfClient.getProfile(), titleOfPost.getText() + "\n" + textOfPost.getText());
+            PostMessage postMessage = new PostMessage(DetailsOfClient.getProfile().getUsername(), titleOfPost.getText() + "\n" + textOfPost.getText());
             try {
                 DetailsOfClient.oos.writeObject(postMessage);
                 DetailsOfClient.oos.flush();
