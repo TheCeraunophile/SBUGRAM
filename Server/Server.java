@@ -86,6 +86,11 @@ class ClientHandler extends Thread {
                         sendingUser(Databace.getInstance().cache.get(a.getUsername()));
                         System.out.println("refresh message resived");
                     }
+                    case "CompeerMessage" -> {
+                        var a = (CompeerMessage) message;
+                        Databace.getInstance().cache.get(a.getReceiver().getUsername()).updateFollower(a.getSender(),a.getCompeerType());
+                        Databace.getInstance().cache.get(a.getSender().getUsername()).updateFollowing(a.getReceiver(),a.getCompeerType());
+                    }
                     case "LikeOrDislikeMessage" -> {
                         var a = (LikeOrDislikeMessage) message;
                         if (a.getGread()==0)
@@ -100,7 +105,6 @@ class ClientHandler extends Thread {
                                     .get(Databace.getInstance().cache
                                             .get(a.getResived().getUsername()).getPostList().indexOf(a.getPost()))
                                     .updateLike();
-
                     }
                 }
             } catch (Exception e) {

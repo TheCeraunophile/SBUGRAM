@@ -56,13 +56,8 @@ public class User implements Serializable {
         }
     }
 
-    public void updateFollower(User user, boolean action){
-        /*
-             if action been true -> means that this user starts to following you
-             or don't -> end to following you
-             because the client don't chek necessary conditions and only sent one message we should calculate these
-        */
-        if (action){
+    public void updateFollower(User user, CompeerType type){
+        if (type==CompeerType.FOLLOW){
             if (!follower.contains(user)){
                 follower.add(user);
             }
@@ -71,8 +66,8 @@ public class User implements Serializable {
         }
     }
 
-    private void updateFollowing(User user,boolean action){
-        if (action){
+    public void updateFollowing(User user,CompeerType type){
+        if (type==CompeerType.FOLLOW){
             if (!following.contains(user)){
                 following.add(user);
             }
