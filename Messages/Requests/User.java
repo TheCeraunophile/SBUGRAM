@@ -1,4 +1,4 @@
-package Server.Databace;
+package Messages.Requests;
 
 import java.io.Serializable;
 import java.util.ArrayList;

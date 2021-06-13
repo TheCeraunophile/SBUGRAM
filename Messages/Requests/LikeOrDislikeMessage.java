@@ -1,8 +1,5 @@
 package Messages.Requests;
 
-import Server.Databace.Post;
-import Server.Databace.User;
-
 import java.io.Serializable;
 
 public class LikeOrDislikeMessage implements  Serializable {

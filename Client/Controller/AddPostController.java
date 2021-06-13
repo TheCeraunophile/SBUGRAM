@@ -1,9 +1,12 @@
 package Client.Controller;
-import Server.Databace.Post;
+import Messages.Requests.PostMessage;
+import Messages.Requests.Refresh;
 import Client.Model.DetailsOfClient;
 import Client.Model.PageLoader;
+import Messages.Requests.User;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import java.io.IOException;
 
 public class AddPostController {
@@ -11,19 +14,28 @@ public class AddPostController {
     public Button publish;
     public TextArea textOfPost;
     public Button cancel;
+    public TextField titleOfPost;
 
     public void publish(){
         if(!textOfPost.getText().equals("")){
-            Post post = new Post(DetailsOfClient.getProfile(), textOfPost.getText());
+            /*
+                title of every post handled by only one new line
+                title in not necessary for every post
+            */
+            PostMessage postMessage = new PostMessage(DetailsOfClient.getProfile(), titleOfPost.getText() + "\n" + textOfPost.getText());
             try {
-                DetailsOfClient.oos.writeObject(post);
+                DetailsOfClient.oos.writeObject(postMessage);
                 DetailsOfClient.oos.flush();
+                DetailsOfClient.oos.writeObject(new Refresh(DetailsOfClient.getUsername()));
+                DetailsOfClient.oos.flush();
+                var answer = DetailsOfClient.ois.readObject();
+                DetailsOfClient.setProfile((User) answer);
+            }catch (ClassNotFoundException e){
+                e.getStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
             jumpToBack();
-        }else {
-            // TODO: 09/06/2021 one popup
         }
     }
 
@@ -38,5 +50,4 @@ public class AddPostController {
     public void cancel(){
         jumpToBack();
     }
-
 }

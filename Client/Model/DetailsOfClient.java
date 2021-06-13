@@ -1,5 +1,5 @@
 package Client.Model;
-import Server.Databace.User;
+import Messages.Requests.User;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -23,12 +23,12 @@ public class DetailsOfClient {
         }
     }
 
-    public static void setUsername(String username) {
-        DetailsOfClient.username = username;
+    public static void setUsername(String use) {
+        username = use;
     }
 
-    public static void setProfile(User profile) {
-        DetailsOfClient.profile = profile;
+    public static void setProfile(User prof) {
+        profile = prof;
     }
 
     public static String getUsername() {

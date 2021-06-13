@@ -8,7 +8,7 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Controller.TimeLineController">
    <children>
-      <ListView layoutX="200.0" layoutY="8.0" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" prefHeight="589.0" prefWidth="553.0" />
+      <ListView fx:id="ListView" layoutX="200.0" layoutY="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="589.0" prefWidth="561.0" />
       <Button fx:id="logout" layoutX="22.0" layoutY="455.0" mnemonicParsing="false" onAction="#logout" prefHeight="25.0" prefWidth="88.0" text="LogOut" />
       <Button fx:id="home" layoutX="22.0" layoutY="414.0" mnemonicParsing="false" onAction="#home" prefHeight="25.0" prefWidth="88.0" text="Home" />
       <Button fx:id="direct" layoutX="22.0" layoutY="378.0" mnemonicParsing="false" onAction="#direct" prefHeight="25.0" prefWidth="88.0" text="Direct" />

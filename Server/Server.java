@@ -4,7 +4,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import Server.Databace.User;
+import Messages.Requests.User;
 import Messages.Requests.*;
 import Server.Databace.Databace;
 
@@ -84,6 +84,7 @@ class ClientHandler extends Thread {
                     case "Refresh" -> {
                         var a = (Refresh) message;
                         sendingUser(Databace.getInstance().cache.get(a.getUsername()));
+                        System.out.println("refresh message resived");
                     }
                     case "LikeOrDislikeMessage" -> {
                         var a = (LikeOrDislikeMessage) message;

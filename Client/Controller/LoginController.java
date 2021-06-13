@@ -1,6 +1,7 @@
 package Client.Controller;
-import Server.Databace.User;
+import Messages.Requests.User;
 import Client.Model.PageLoader;
+import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextArea;
@@ -8,9 +9,11 @@ import javafx.scene.control.TextField;
 import Messages.Requests.*;
 import java.io.IOException;
 import Client.Model.DetailsOfClient;
+import javafx.scene.text.Text;
 
 public class LoginController{
 
+    public Text wrongInformation;
     private String password;
     private String username;
 
@@ -33,7 +36,7 @@ public class LoginController{
      * hiding field not related to login like needhellp and signup
      * */
 
-    public void login(){
+    public void login(ActionEvent actionEvent){
         username_field.setVisible(true);
         password_field.setVisible(true);
         showPasswordButton.setVisible(true);
@@ -47,8 +50,9 @@ public class LoginController{
         month_test.setVisible(false);
         year_test.setVisible(false);
 
-        boolean connectionIsValid = false;
         if (!username_field.getText().equals("") & !password_field.getText().equals("")){
+            if (wrongInformation.isVisible())
+                wrongInformation.setVisible(false);
             this.password = password_field.getText();
             username=username_field.getText();
             Connect packet = new Connect(username,password);
@@ -57,31 +61,16 @@ public class LoginController{
                 DetailsOfClient.oos.flush();
                 var answer = DetailsOfClient.ois.readObject();
                 if (answer==null){
-                    System.out.println("this username not available :/");
+                    wrongInformation.setText("wrong password or username");
+                    wrongInformation.setVisible(true);
                 }else {
                     DetailsOfClient.setProfile((User)answer);
                     DetailsOfClient.setUsername(username);
-                    connectionIsValid=true;
+                    nextPage();
                 }
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
                 System.out.println(e.getMessage());
-            }
-            if (connectionIsValid) {
-                nextPage();
-            }else {
-                try {
-                    password_field.setText("");
-                    username_field.setText("");
-                    day_birthday.setText("");
-                    year_test.setText("");
-                    month_test.setText("");
-                    show_password.setText("");
-                    bio_field.setText("");
-                    new PageLoader().load("Login");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             }
         }
     }
@@ -101,14 +90,10 @@ public class LoginController{
         name_hellp.setVisible(false);
         day_birthday.setVisible(false);
 
-        if (
-                !username_field.getText().equals("")
-                &
-                !password_field.getText().equals("")
-                &
-                !bio_field.getText().equals("")
-        ){
-            boolean connectionIsValid = false;
+        if (!username_field.getText().equals("") & !password_field.getText().equals("") & !bio_field.getText().equals("")){
+            
+            if (wrongInformation.isVisible())
+                wrongInformation.setVisible(false);
             this.password=password_field.getText();
             this.username= username_field.getText();
 
@@ -118,30 +103,22 @@ public class LoginController{
                 DetailsOfClient.oos.flush();
                 var answer = DetailsOfClient.ois.readObject();
                 if (answer==null){
-                    System.out.println("one username already exist");
+                    wrongInformation.setText("this username already chosen");
+                    wrongInformation.setVisible(true);
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    wrongInformation.setVisible(false);
+                    wrongInformation.setText("");
                 }else {
                     DetailsOfClient.setProfile((User)answer);
                     DetailsOfClient.setUsername(username);
-                    connectionIsValid=true;
+                    nextPage();
                 }
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
-            }
-            if (connectionIsValid) {
-                nextPage();
-            }else {
-                try {
-                    password_field.setText("");
-                    username_field.setText("");
-                    day_birthday.setText("");
-                    year_test.setText("");
-                    month_test.setText("");
-                    show_password.setText("");
-                    bio_field.setText("");
-                    new PageLoader().load("Login");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             }
         }
     }
@@ -159,6 +136,8 @@ public class LoginController{
         broken_pass.setVisible(true);
         name_hellp.setVisible(true);
         day_birthday.setVisible(true);
+
+        // TODO: 11/06/2021  
     }
 
     public void showPassword(){

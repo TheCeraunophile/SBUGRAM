@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
@@ -33,6 +34,7 @@
             <PasswordField fx:id="password_field" layoutX="334.0" layoutY="194.0" promptText="password" />
             <TextArea fx:id="bio_field" layoutX="334.0" layoutY="232.0" prefHeight="107.0" prefWidth="170.0" promptText="bio" />
             <TextField fx:id="show_password" editable="false" layoutX="334.0" layoutY="194.0" visible="false" />
+            <Text fx:id="wrongInformation" fill="RED" layoutX="249.0" layoutY="351.0" strokeType="OUTSIDE" strokeWidth="0.0" visible="false" wrappingWidth="357.0" />
          </children>
       </Pane>
    </children>

@@ -1,4 +1,6 @@
 package Server.Databace;
+import Messages.Requests.User;
+
 import java.io.*;
 import java.util.concurrent.ConcurrentHashMap;
 
