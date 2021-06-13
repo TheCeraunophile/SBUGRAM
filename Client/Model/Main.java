@@ -26,6 +26,16 @@ public class Main extends Application {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }else {
+            Disconnect disconnect = new Disconnect(null);
+            try {
+                DetailsOfClient.oos.writeObject(disconnect);
+                DetailsOfClient.oos.flush();
+                DetailsOfClient.closingSrc();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+        System.out.println("end");
     }
 }

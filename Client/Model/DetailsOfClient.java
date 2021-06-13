@@ -12,6 +12,8 @@ public class DetailsOfClient {
     public static Socket socket;
     public static User profile;
     private static String username;
+    private static User target;
+
     private DetailsOfClient(){}
     public static void init(){
         try {
@@ -37,6 +39,14 @@ public class DetailsOfClient {
 
     public static User getProfile() {
         return profile;
+    }
+
+    public static User getTarget() {
+        return target;
+    }
+
+    public static void setTarget(User target) {
+        DetailsOfClient.target = target;
     }
 
     public static void closingSrc(){
