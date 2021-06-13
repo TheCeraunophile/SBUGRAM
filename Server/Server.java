@@ -79,7 +79,7 @@ class ClientHandler extends Thread {
                     }
                     case "PostMessage" -> {
                         var a = (PostMessage) message;
-                        Databace.getInstance().cache.get(a.getSender().getUsername()).updatePost(a.getText());
+                        Databace.getInstance().cache.get(a.getUsernameSender()).updatePost(a.getText());
                     }
                     case "Refresh" -> {
                         var a = (Refresh) message;
@@ -109,6 +109,7 @@ class ClientHandler extends Thread {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+                break;
             }
         }
         System.out.println("end");
