@@ -2,10 +2,7 @@ package Client.Controller;
 
 import Client.Model.DetailsOfClient;
 import Client.Model.PageLoader;
-import Messages.Requests.CompeerMessage;
-import Messages.Requests.CompeerType;
-import Messages.Requests.LikeOrDislikeMessage;
-import Messages.Requests.Post;
+import Messages.Requests.*;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -24,18 +21,27 @@ public class ProfileController {
     public Button Direct;
     public Label follower_number;
     public Label following_number;
-    public ListView<Post> listView;
-    private final ArrayList<Post> profile = new ArrayList<>();
     public Label numberOfFollower;
     public Label numberOfFollowing;
     public Button like;
     public Button dislike;
     public Button reply;
-
     private boolean inmainPage = true;
     private static Post post;
+    public ListView<Post> listView;
+    private final ArrayList<Post> profile = new ArrayList<>();
+
     @FXML
     public void initialize() {
+        if (!DetailsOfClient.getProfile().equals(DetailsOfClient.getTarget())){
+            if (DetailsOfClient.getProfile().getFollowing().contains(DetailsOfClient.getTarget())){
+                unfollow.setVisible(true);
+            }else {
+                follow.setVisible(true);
+            }
+        }
+
+        System.out.println(DetailsOfClient.getProfile().getFollowing());
         numberOfFollower.setText(Integer.toString(DetailsOfClient.getTarget().getFollower().size()));
         numberOfFollowing.setText(Integer.toString(DetailsOfClient.getTarget().getFollowing().size()));
         profile.addAll(DetailsOfClient.getTarget().getPostList());
@@ -48,6 +54,8 @@ public class ProfileController {
         like.setVisible(false);
         dislike.setVisible(false);
         reply.setVisible(false);
+        follow.setVisible(false);
+        unfollow.setVisible(false);
         try {
             if(inmainPage) {
                 new PageLoader().load("TimeLine");
@@ -64,12 +72,23 @@ public class ProfileController {
     public void startingOfFollow(){
         if (!DetailsOfClient.getProfile().equals(DetailsOfClient.getTarget())){
             CompeerMessage packet = new CompeerMessage(DetailsOfClient.getProfile(),DetailsOfClient.getTarget(), CompeerType.FOLLOW);
+            sendingCompeerMessage(packet);
         }
     }
 
     public void endOfFollow(){
         if (!DetailsOfClient.getProfile().equals(DetailsOfClient.getTarget())){
             CompeerMessage packet = new CompeerMessage(DetailsOfClient.getProfile(),DetailsOfClient.getTarget(), CompeerType.UNFOLLOW);
+            sendingCompeerMessage(packet);
+        }
+    }
+
+    private void sendingCompeerMessage(CompeerMessage packet){
+        try {
+            DetailsOfClient.oos.writeObject(packet);
+            DetailsOfClient.oos.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

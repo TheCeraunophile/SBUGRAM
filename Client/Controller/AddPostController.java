@@ -19,7 +19,6 @@ public class AddPostController {
 
     public void publish(){
         if(!textOfPost.getText().equals("")){
-            ReplyMessage packet1;
             if (DetailsOfClient.getTarget()==null){
                 creatingPost();
             }else {
