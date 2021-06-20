@@ -12,7 +12,7 @@ public class Databace {
 
     public void init(){
         try {
-            File repository = new File("/lunatic/home/Documents/Repository");
+            File repository = new File("/home/lunatic/Documents/Repository");
             FileOutputStream fos = new FileOutputStream(repository);
             FileInputStream fis = new FileInputStream(repository);
             oos = new ObjectOutputStream(fos);

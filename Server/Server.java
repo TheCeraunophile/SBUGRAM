@@ -4,6 +4,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import Messages.Requests.User;
 import Messages.Requests.*;
 import Server.Databace.Databace;
@@ -38,8 +40,8 @@ public class Server {
                 e.printStackTrace();
             }
         }
-//        if (Server.numberOfConnectedClients < 1)
-//            Databace.getInstance().pushingData();
+        if (Server.numberOfConnectedClients < 1)
+            Databace.getInstance().pushingData();
     }
 
 }
@@ -90,6 +92,30 @@ class ClientHandler extends Thread {
                         var a = (CompeerMessage) message;
                         Databace.getInstance().cache.get(a.getReceiver().getUsername()).updateFollower(a.getSender(),a.getCompeerType());
                         Databace.getInstance().cache.get(a.getSender().getUsername()).updateFollowing(a.getReceiver(),a.getCompeerType());
+                    }
+                    case "ReplyMessage" -> {
+                        var a = (ReplyMessage)message;
+                        Post post = new Post(a.getReplyer(),a.getText());
+                        Databace.getInstance().cache.get(a.usernameOfReplayed()).getPostList()
+                        .
+                        get( Databace.getInstance().cache.get(a.usernameOfReplayed()).getPostList().indexOf(a.getPost())).addReply(post);
+                        Databace.getInstance().cache.get(a.usernameOfReplayer()).updatePost(a.getText());
+                    }
+                    case "SearchMessage" -> {
+                        var a = (SearchMessage) message;
+                        System.out.println(a.getUsernametest());
+                        List<User> kk = new ArrayList<>(Databace.getInstance().cache.values());
+                        for (int i=kk.size()-1;i>=0;i--){
+                            if (!kk.get(i).getUsername().contains(a.getUsernametest()))
+                                kk.remove(i);
+                        }
+//                        List<User> jj = new ArrayList<>(Databace.getInstance().cache.values());
+//                        jj = jj.stream().filter(b -> b.getUsername().contains(a.getUsernametest())).collect(Collectors.toList());
+//                        int s = jj.size();
+                        for (int i=0;i<kk.size();i++) {
+                            sendingUser(kk.get(i));
+                        }
+                        sendingUser(null);
                     }
                     case "LikeOrDislikeMessage" -> {
                         var a = (LikeOrDislikeMessage) message;
