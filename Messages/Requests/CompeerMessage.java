@@ -1,6 +1,8 @@
 package Messages.Requests;
 
-public class CompeerMessage {
+import java.io.Serializable;
+
+public class CompeerMessage implements Serializable {
     private final User sender;
     private final CompeerType compeerType;
     private final User receiver ;

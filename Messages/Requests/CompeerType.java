@@ -1,5 +1,7 @@
 package Messages.Requests;
 
-public enum CompeerType {
+import java.io.Serializable;
+
+public enum CompeerType implements Serializable {
     FOLLOW,UNFOLLOW,
 }

@@ -9,7 +9,7 @@ public class Post implements Serializable {
     private final String text;
     private Integer like;
     private Integer disLike;
-    private List<Post> replysOfPost = new ArrayList<>();
+    private final List<Post> replysOfPost = new ArrayList<>();
 
     public Post(User sender,String text){
         this.sender=sender;
@@ -18,7 +18,7 @@ public class Post implements Serializable {
         disLike=0;
     }
 
-    private void replyForPost(Post post){
+    public void addReply(Post post){
         replysOfPost.add(post);
     }
 
@@ -36,5 +36,9 @@ public class Post implements Serializable {
 
     public User getSender() {
         return sender;
+    }
+
+    public List<Post> getListReply(){
+        return replysOfPost;
     }
 }

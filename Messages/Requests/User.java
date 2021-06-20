@@ -44,6 +44,10 @@ public class User implements Serializable {
         postList.add(post);
     }
 
+    public String getBio() {
+        return bio;
+    }
+
     public void updateDirectMessage(User up, String textMessage){
         if (!directMessage.containsKey(up)){
             ArrayList<String> temp = new ArrayList<>();
@@ -86,20 +90,24 @@ public class User implements Serializable {
 
     @Override
     public boolean equals(Object obj){
+        if (obj==null) {
+            System.out.println("null");
+            return false;
+        }
         User temp ;
         try {
             temp = (User) obj;
         }catch (Exception e){
+            System.out.println("false");
             return false;
         }
-        if (!this.password.equalsIgnoreCase(temp.password))
-            return false;
         return this.username.equalsIgnoreCase(temp.username);
     }
 
     @Override
     public int hashCode(){
+        System.out.println("hash code");
         int result = 17;
-        return  result*31*password.hashCode();
+        return  result*31*username.hashCode();
     }
 }
