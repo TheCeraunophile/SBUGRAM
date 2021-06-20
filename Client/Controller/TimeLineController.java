@@ -24,16 +24,15 @@ public class TimeLineController{
     public Button direct;
     public Button profile;
     public Button writPost;
-    public ListView<Post> ListView;
     public TextField textOfSearch;
     public Button startOfSearch;
-    public ListView<User> resultSearch ;
     public Button clear;
     public Button like;
     public Button dislike;
-    public Button back;
     public Button reply;
+    public ListView<Post> ListView;
     private ArrayList<Post> timeLine = new ArrayList<>();
+    public ListView<User> resultSearch ;
     private static boolean  inmainPage = true;
     private static Post postTarget = null;
 
@@ -80,7 +79,6 @@ public class TimeLineController{
     }
 
     public void home(){
-        back.setVisible(false);
         dislike.setVisible(false);
         like.setVisible(false);
         reply.setVisible(false);
@@ -107,6 +105,7 @@ public class TimeLineController{
     /**
      * this 2 methods to finding others users and go to their direct or profile
      * clear result , hide the window that show results
+     * showListResult goes to the selected User profile
      * */
 
     public void Searching(){
@@ -115,17 +114,16 @@ public class TimeLineController{
             try {
                 DetailsOfClient.oos.writeObject(packet);
                 DetailsOfClient.oos.flush();
-                List<User> ll = new ArrayList<>();
+                List<User> innerListUser = new ArrayList<>();
                 var answer = DetailsOfClient.ois.readObject();
                 while (answer!=null){
-                    ll.add((User) answer);
+                    innerListUser.add((User) answer);
                     answer = DetailsOfClient.ois.readObject();
                 }
-                System.out.println(ll.size());
                 clear.setVisible(true);
                 resultSearch.setVisible(true);
                 startOfSearch.setVisible(false);
-                Set<User> temp = new HashSet<>(ll);
+                Set<User> temp = new HashSet<>(innerListUser);
                 resultSearch.setItems(FXCollections.observableArrayList(temp));
                 resultSearch.setCellFactory(resultSearch -> new UserItem());
             } catch (IOException | ClassNotFoundException e) {
@@ -141,6 +139,19 @@ public class TimeLineController{
         textOfSearch.setText("");
     }
 
+    public void showListUser(){
+        User u = resultSearch.getSelectionModel().getSelectedItem();
+        DetailsOfClient.setTarget(u);
+        if (u!=null) {
+//            DetailsOfClient.setTarget(resultSearch.getSelectionModel().getSelectedItem());
+            try {
+                new PageLoader().load("Profile");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     /**
      * 4 button for working with others post ,like,dislike,rep and back to seen others posts
      * if one post selected it's reply showed in time line and with back button this turn to past.
@@ -154,7 +165,6 @@ public class TimeLineController{
             dislike.setVisible(true);
             like.setVisible(true);
             reply.setVisible(true);
-            back.setVisible(true);
             DetailsOfClient.setTarget(p.getSender());
             try {
                 List<Post> temp = new ArrayList<>(p.getListReply());

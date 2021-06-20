@@ -20,5 +20,8 @@
       <ImageView fitHeight="88.0" fitWidth="89.0" layoutX="45.0" layoutY="17.0" pickOnBounds="true" preserveRatio="true" />
       <Label fx:id="numberOfFollower" layoutX="79.0" layoutY="127.0" text="0" />
       <Label fx:id="numberOfFollowing" layoutX="198.0" layoutY="127.0" text="0" />
+      <Button fx:id="like" layoutX="176.0" layoutY="300.0" mnemonicParsing="false" onAction="#updateLike" prefHeight="25.0" prefWidth="62.0" text="Like" visible="false" />
+      <Button fx:id="dislike" layoutX="176.0" layoutY="339.0" mnemonicParsing="false" onAction="#updateDislike" text="Dislike" visible="false" />
+      <Button fx:id="reply" layoutX="176.0" layoutY="374.0" mnemonicParsing="false" onAction="#updateReply" prefHeight="25.0" prefWidth="62.0" text="Reply" visible="false" />
    </children>
 </AnchorPane>

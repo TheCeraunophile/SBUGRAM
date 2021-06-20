@@ -8,12 +8,18 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Controller.TimeLineController">
    <children>
-      <ListView fx:id="ListView" layoutX="200.0" layoutY="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#showPost" prefHeight="589.0" prefWidth="561.0" />
+      <ListView fx:id="ListView" layoutX="333.0" layoutY="-3.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#showPost" prefHeight="606.0" prefWidth="561.0" />
       <Button fx:id="logout" layoutX="22.0" layoutY="527.0" mnemonicParsing="false" onAction="#logout" prefHeight="25.0" prefWidth="88.0" text="LogOut" />
-      <Button fx:id="home" layoutX="22.0" layoutY="353.0" mnemonicParsing="false" onAction="#home" prefHeight="25.0" prefWidth="88.0" text="Home" />
-      <Button fx:id="direct" layoutX="22.0" layoutY="416.0" mnemonicParsing="false" onAction="#direct" prefHeight="25.0" prefWidth="88.0" text="Direct" />
-      <Button fx:id="profile" layoutX="22.0" layoutY="384.0" mnemonicParsing="false" onAction="#profile" prefHeight="25.0" prefWidth="88.0" text="Profile" />
-      <TextField layoutX="14.0" layoutY="31.0" promptText="search" />
-      <Button fx:id="writPost" layoutX="22.0" layoutY="449.0" mnemonicParsing="false" onAction="#WritPost" prefHeight="25.0" prefWidth="88.0" text="WritPost" />
+      <Button fx:id="home" layoutX="242.0" layoutY="527.0" mnemonicParsing="false" onAction="#home" prefHeight="25.0" prefWidth="88.0" text="Home" />
+      <Button fx:id="direct" layoutX="125.0" layoutY="527.0" mnemonicParsing="false" onAction="#direct" prefHeight="25.0" prefWidth="88.0" text="Direct" />
+      <Button fx:id="profile" layoutX="242.0" layoutY="493.0" mnemonicParsing="false" onAction="#profile" prefHeight="25.0" prefWidth="88.0" text="Profile" />
+      <TextField fx:id="textOfSearch" layoutX="87.0" layoutY="14.0" promptText="search" />
+      <Button fx:id="writPost" layoutX="22.0" layoutY="493.0" mnemonicParsing="false" onAction="#WritPost" prefHeight="25.0" prefWidth="88.0" text="WritPost" />
+      <Button fx:id="startOfSearch" layoutX="114.0" layoutY="46.0" mnemonicParsing="false" onAction="#Searching" text="start searching" />
+      <ListView fx:id="resultSearch" layoutX="10.0" layoutY="46.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#showListUser" prefHeight="420.0" prefWidth="317.0" visible="false" />
+      <Button fx:id="clear" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#clearResultSearch" text="clear" visible="false" />
+      <Button fx:id="like" layoutX="265.0" layoutY="192.0" mnemonicParsing="false" onAction="#updateLikeOfPostIsOthers" prefHeight="25.0" prefWidth="59.0" text="like" visible="false" />
+      <Button fx:id="dislike" layoutX="265.0" layoutY="225.0" mnemonicParsing="false" onAction="#updateDislikeOfPostIsOthers" text="dislike" visible="false" />
+      <Button fx:id="reply" layoutX="264.0" layoutY="288.0" mnemonicParsing="false" onAction="#replyThisPost" prefHeight="25.0" prefWidth="59.0" text="reply" visible="false" />
    </children>
 </Pane>
