@@ -38,8 +38,6 @@ public class TimeLineController{
 
     @FXML
     public void initialize() {
-        if (Databace.getInstance().cache!=null)
-        System.out.println("clients is"+Databace.getInstance().cache.size());
         try {
             System.out.println(DetailsOfClient.getProfile().getUsername());
             System.out.println(DetailsOfClient.getProfile().getPassword());

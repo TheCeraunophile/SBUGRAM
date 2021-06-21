@@ -11,16 +11,17 @@ import Messages.Requests.*;
 import Server.Databace.Databace;
 
 public class Server {
+    static Databace databace;
     static Integer numberOfConnectedClients = 0;
     public static void main(String[] args) throws IOException {
+        databace = new Databace();
         ServerSocket serverSocket = new ServerSocket(8080);
-        Databace.getInstance().init();
         while (true){
                 Socket user = serverSocket.accept();
                 ObjectOutputStream oos = new ObjectOutputStream(user.getOutputStream());
                 ObjectInputStream ois = new ObjectInputStream(user.getInputStream());
                 timeOfPush("plus");
-                new ClientHandler(oos,ois).start();
+                new ClientHandler(databace,oos,ois).start();
         }
     }
 
@@ -40,17 +41,21 @@ public class Server {
                 e.printStackTrace();
             }
         }
-        if (Server.numberOfConnectedClients < 1)
-            Databace.getInstance().pushingData();
+        if (Server.numberOfConnectedClients < 1){
+            databace.pushingData();
+        }
+        // TODO: 20/06/2021 write databace in file system
     }
 
 }
 class ClientHandler extends Thread {
     private ObjectInputStream ois ;
     private ObjectOutputStream oos;
-    public ClientHandler(ObjectOutputStream oos,ObjectInputStream ois){
+    private Databace databace;
+    public ClientHandler(Databace databace,ObjectOutputStream oos,ObjectInputStream ois){
         this.oos=oos;
         this.ois=ois;
+        this.databace=databace;
     }
     @Override
     public void run(){
@@ -76,35 +81,35 @@ class ClientHandler extends Thread {
                     }
                     case "DirectMessage" -> {
                         var a = (DirectMessage) message;
-                        Databace.getInstance().cache.get(a.getSender().getUsername()).updateDirectMessage(a.getRisived(),a.getTextMessage());
-                        Databace.getInstance().cache.get(a.getRisived().getUsername()).updateDirectMessage(a.getSender(),a.getTextMessage());
+                        databace.getInstance().get(a.getSender().getUsername()).updateDirectMessage(a.getRisived(),a.getTextMessage());
+                        databace.getInstance().get(a.getRisived().getUsername()).updateDirectMessage(a.getSender(),a.getTextMessage());
                     }
                     case "PostMessage" -> {
                         var a = (PostMessage) message;
-                        Databace.getInstance().cache.get(a.getUsernameSender()).updatePost(a.getText());
+                        databace.getInstance().get(a.getUsernameSender()).updatePost(a.getText());
                     }
                     case "Refresh" -> {
                         var a = (Refresh) message;
-                        sendingUser(Databace.getInstance().cache.get(a.getUsername()));
+                        sendingUser(databace.getInstance().get(a.getUsername()));
                         System.out.println("refresh message resived");
                     }
                     case "CompeerMessage" -> {
                         var a = (CompeerMessage) message;
-                        Databace.getInstance().cache.get(a.getReceiver().getUsername()).updateFollower(a.getSender(),a.getCompeerType());
-                        Databace.getInstance().cache.get(a.getSender().getUsername()).updateFollowing(a.getReceiver(),a.getCompeerType());
+                        databace.getInstance().get(a.getReceiver().getUsername()).updateFollower(a.getSender(),a.getCompeerType());
+                        databace.getInstance().get(a.getSender().getUsername()).updateFollowing(a.getReceiver(),a.getCompeerType());
                     }
                     case "ReplyMessage" -> {
                         var a = (ReplyMessage)message;
                         Post post = new Post(a.getReplyer(),a.getText());
-                        Databace.getInstance().cache.get(a.usernameOfReplayed()).getPostList()
+                        databace.getInstance().get(a.usernameOfReplayed()).getPostList()
                         .
-                        get( Databace.getInstance().cache.get(a.usernameOfReplayed()).getPostList().indexOf(a.getPost())).addReply(post);
-                        Databace.getInstance().cache.get(a.usernameOfReplayer()).updatePost(a.getText());
+                        get( databace.getInstance().get(a.usernameOfReplayed()).getPostList().indexOf(a.getPost())).addReply(post);
+                        databace.getInstance().get(a.usernameOfReplayer()).updatePost(a.getText());
                     }
                     case "SearchMessage" -> {
                         var a = (SearchMessage) message;
                         System.out.println(a.getUsernametest());
-                        List<User> kk = new ArrayList<>(Databace.getInstance().cache.values());
+                        List<User> kk = new ArrayList<>(databace.getInstance().values());
                         for (int i=kk.size()-1;i>=0;i--){
                             if (!kk.get(i).getUsername().contains(a.getUsernametest()))
                                 kk.remove(i);
@@ -120,15 +125,15 @@ class ClientHandler extends Thread {
                     case "LikeOrDislikeMessage" -> {
                         var a = (LikeOrDislikeMessage) message;
                         if (a.getGread()==0)
-                            Databace.getInstance().cache.get
+                            databace.getInstance().get
                                     (a.getResived().getUsername()).getPostList()
-                                    .get(Databace.getInstance().cache
+                                    .get(databace.getInstance()
                                             .get(a.getResived().getUsername()).getPostList().indexOf(a.getPost()))
                                     .updateDisLike();
                         else
-                            Databace.getInstance().cache.get
+                            databace.getInstance().get
                                     (a.getResived().getUsername()).getPostList()
-                                    .get(Databace.getInstance().cache
+                                    .get(databace.getInstance()
                                             .get(a.getResived().getUsername()).getPostList().indexOf(a.getPost()))
                                     .updateLike();
                     }
@@ -190,14 +195,14 @@ class ClientHandler extends Thread {
             password = a.getPassword();
         }
         boolean detailsIsValid = false;
-        if (Databace.getInstance().cache.containsKey(username)) {
-            if (Databace.getInstance().cache.get(username).getPassword().equals(password)) {
+        if (databace.getInstance().containsKey(username)) {
+            if (databace.getInstance().get(username).getPassword().equals(password)) {
                 if (status.equalsIgnoreCase("connect")) {
-                    sendingUser(Databace.getInstance().cache.get(username));
+                    sendingUser(databace.getInstance().get(username));
                     detailsIsValid=true;
                 }
                 if (status.equalsIgnoreCase("deletingAccount")){
-                    Databace.getInstance().cache.remove(username);
+                    databace.getInstance().remove(username);
                     sendingUser(new User(null,null,null,null));
                     detailsIsValid=true;
                 }
@@ -213,7 +218,7 @@ class ClientHandler extends Thread {
         else {
             if (status.equalsIgnoreCase("CreatingAccount")) {
                 User newUser = new User(username, password, null, bio);
-                Databace.getInstance().cache.put(username, newUser);
+                databace.getInstance().put(username, newUser);
                 sendingUser(newUser);
             }else {
                 sendingUser(null); //hwo want to clear it's account given wrong username or
