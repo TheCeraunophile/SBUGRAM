@@ -34,7 +34,8 @@
             <PasswordField fx:id="password_field" layoutX="334.0" layoutY="194.0" promptText="password" />
             <TextArea fx:id="bio_field" layoutX="334.0" layoutY="232.0" prefHeight="107.0" prefWidth="170.0" promptText="bio" />
             <TextField fx:id="show_password" editable="false" layoutX="334.0" layoutY="194.0" visible="false" />
-            <Text fx:id="wrongInformation" fill="RED" layoutX="249.0" layoutY="351.0" strokeType="OUTSIDE" strokeWidth="0.0" visible="false" wrappingWidth="357.0" />
+            <Label fx:id="logOfFailed" alignment="CENTER" contentDisplay="CENTER" layoutX="308.0" layoutY="5.0" prefHeight="18.0" prefWidth="238.0" text="password or username NOT correct" textAlignment="CENTER" textFill="RED" textOverrun="CENTER_ELLIPSIS" visible="false" />
+            <Label fx:id="logOfUsernameFailed" alignment="CENTER" contentDisplay="CENTER" layoutX="225.0" layoutY="7.0" prefHeight="15.0" prefWidth="467.0" text="username should only contains characters 0-9 numbers and underLine" textAlignment="CENTER" textFill="RED" visible="false" />
          </children>
       </Pane>
    </children>

@@ -2,18 +2,16 @@ package Client.Controller;
 import Messages.Requests.User;
 import Client.Model.PageLoader;
 import javafx.event.ActionEvent;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import Messages.Requests.*;
 import java.io.IOException;
+import java.nio.channels.ClosedChannelException;
+
 import Client.Model.DetailsOfClient;
 import javafx.scene.text.Text;
 
 public class LoginController{
 
-    public Text wrongInformation;
     private String password;
     private String username;
 
@@ -31,6 +29,8 @@ public class LoginController{
     public TextField broken_pass;
     public TextField day_birthday;
     public CheckBox showPasswordButton;
+    public Label logOfFailed;
+    public Label logOfUsernameFailed;
 
     /**
      * hiding field not related to login like needhellp and signup
@@ -51,8 +51,10 @@ public class LoginController{
         year_test.setVisible(false);
 
         if (!username_field.getText().equals("") & !password_field.getText().equals("")){
-            if (wrongInformation.isVisible())
-                wrongInformation.setVisible(false);
+            if (logOfFailed.isVisible())
+                logOfFailed.setVisible(false);
+            if (logOfUsernameFailed.isVisible())
+                logOfUsernameFailed.setVisible(false);
             this.password = password_field.getText();
             username=username_field.getText();
             Connect packet = new Connect(username,password);
@@ -61,8 +63,7 @@ public class LoginController{
                 DetailsOfClient.oos.flush();
                 var answer = DetailsOfClient.ois.readObject();
                 if (answer==null){
-                    wrongInformation.setText("wrong password or username");
-                    wrongInformation.setVisible(true);
+                    logOfFailed.setVisible(true);
                 }else {
                     DetailsOfClient.setProfile((User)answer);
                     DetailsOfClient.setUsername(username);
@@ -91,34 +92,43 @@ public class LoginController{
         day_birthday.setVisible(false);
 
         if (!username_field.getText().equals("") & !password_field.getText().equals("") & !bio_field.getText().equals("")){
-            
-            if (wrongInformation.isVisible())
-                wrongInformation.setVisible(false);
-            this.password=password_field.getText();
+            boolean allIsValid = true;
+            if (logOfFailed.isVisible())
+                logOfFailed.setVisible(false);
+            if (logOfUsernameFailed.isVisible())
+                logOfUsernameFailed.setVisible(false);
             this.username= username_field.getText();
-
-            CreatingAccount packet = new CreatingAccount(username,password,null,bio_field.getText());
-            try {
-                DetailsOfClient.oos.writeObject(packet);
-                DetailsOfClient.oos.flush();
-                var answer = DetailsOfClient.ois.readObject();
-                if (answer==null){
-                    wrongInformation.setText("this username already chosen");
-                    wrongInformation.setVisible(true);
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    wrongInformation.setVisible(false);
-                    wrongInformation.setText("");
-                }else {
-                    DetailsOfClient.setProfile((User)answer);
-                    DetailsOfClient.setUsername(username);
-                    nextPage();
+            this.password=password_field.getText();
+            //checking validation of username
+            //showed with allIsValid.
+            int[] chek = new int[30];
+            for (int i=0;i<username.length();i++){
+                chek[i] = username.charAt(i);
+            }
+            for (int s : chek) {
+                System.out.println((char) s);
+                if (!Character.isAlphabetic((char)s) & !Character.isDigit((char) s) & s!=32 & s!=95 & s!=0){
+                    System.out.println("failed");
+                    logOfUsernameFailed.setVisible(true);
+                    allIsValid=false;
                 }
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
+            }
+            if (allIsValid) {
+                CreatingAccount packet = new CreatingAccount(username, password, null, bio_field.getText());
+                try {
+                    DetailsOfClient.oos.writeObject(packet);
+                    DetailsOfClient.oos.flush();
+                    var answer = DetailsOfClient.ois.readObject();
+                    if (answer == null) {
+                        logOfFailed.setVisible(true);
+                    } else {
+                        DetailsOfClient.setProfile((User) answer);
+                        DetailsOfClient.setUsername(username);
+                        nextPage();
+                    }
+                } catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -136,6 +146,10 @@ public class LoginController{
         broken_pass.setVisible(true);
         name_hellp.setVisible(true);
         day_birthday.setVisible(true);
+        if (logOfFailed.isVisible())
+            logOfFailed.setVisible(false);
+        if (logOfUsernameFailed.isVisible())
+            logOfUsernameFailed.setVisible(false);
 
         // TODO: 11/06/2021  
     }
