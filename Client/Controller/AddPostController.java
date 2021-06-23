@@ -1,10 +1,7 @@
 package Client.Controller;
-import Messages.Requests.PostMessage;
-import Messages.Requests.Refresh;
+import Messages.Requests.*;
 import Client.Model.DetailsOfClient;
 import Client.Model.PageLoader;
-import Messages.Requests.ReplyMessage;
-import Messages.Requests.User;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -19,14 +16,9 @@ public class AddPostController {
 
     public void publish(){
         if(!textOfPost.getText().equals("")){
-            if (DetailsOfClient.getTarget()==null){
+            if (DetailsOfClient.getTarget().equals(DetailsOfClient.getProfile())){
                 creatingPost();
             }else {
-                if (DetailsOfClient.getProfile().equals(DetailsOfClient.getTarget())) {
-                    creatingPost();
-                }
-            }
-            if (!DetailsOfClient.getProfile().equals(DetailsOfClient.getTarget())){
                 creatingRep();
             }
         }
@@ -34,13 +26,25 @@ public class AddPostController {
 
     private void update(){
         try {
-            DetailsOfClient.oos.writeObject(new Refresh(DetailsOfClient.getUsername()));
+            String username = DetailsOfClient.getUsername();
+            String password = DetailsOfClient.getProfile().getPassword();
+            User target = DetailsOfClient.getTarget();
+            DetailsOfClient.oos.writeObject(new Disconnect(DetailsOfClient.getUsername()));
+            DetailsOfClient.oos.flush();
+            DetailsOfClient.closingSrc();
+            DetailsOfClient.init();
+            Connect packet = new Connect(username,password);
+            DetailsOfClient.oos.writeObject(packet);
             DetailsOfClient.oos.flush();
             var answer = DetailsOfClient.ois.readObject();
-            DetailsOfClient.setProfile((User) answer);
+            if (answer!=null){
+                DetailsOfClient.setProfile((User)answer);
+                DetailsOfClient.setTarget(target);
+                DetailsOfClient.setUsername(username);
+            }
         }catch (ClassNotFoundException e){
             e.getStackTrace();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -95,6 +99,5 @@ public class AddPostController {
         }
         update();
         goToBack("Profile");
-
     }
 }
