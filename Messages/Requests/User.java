@@ -9,10 +9,10 @@ public class User implements Serializable {
     private String password;
     private String location;
     private String bio;
-    private final ArrayList<Post> postList = new ArrayList<>();
-    private final ArrayList<User> following = new ArrayList<>();
-    private final ArrayList<User> follower = new ArrayList<>();
-    private final HashMap<User,ArrayList<String>> directMessage = new HashMap<>();
+    private  ArrayList<Post> postList = new ArrayList<>();
+    private  ArrayList<User> following = new ArrayList<>();
+    private  ArrayList<User> follower = new ArrayList<>();
+    private  HashMap<User,ArrayList<String>> directMessage = new HashMap<>();
 
     public User(String username,String password,String birthdayDate,String bio){
         this.username=username;
@@ -42,6 +42,7 @@ public class User implements Serializable {
     public void updatePost(String text){
         Post post = new Post(this,text);
         postList.add(post);
+//        postList = new ArrayList<>(postList);
     }
 
     public String getBio() {
@@ -62,11 +63,9 @@ public class User implements Serializable {
 
     public void updateFollower(User user, CompeerType type){
         if (type==CompeerType.UNFOLLOW){
-            if (!follower.contains(user)){
-                follower.add(user);
-            }
-        }else {
             follower.remove(user);
+        }else {
+            follower.add(user);
         }
     }
 
@@ -91,14 +90,12 @@ public class User implements Serializable {
     @Override
     public boolean equals(Object obj){
         if (obj==null) {
-            System.out.println("null");
             return false;
         }
         User temp ;
         try {
             temp = (User) obj;
         }catch (Exception e){
-            System.out.println("false");
             return false;
         }
         return this.username.equalsIgnoreCase(temp.username);
@@ -106,7 +103,6 @@ public class User implements Serializable {
 
     @Override
     public int hashCode(){
-        System.out.println("hash code");
         int result = 17;
         return  result*31*username.hashCode();
     }
