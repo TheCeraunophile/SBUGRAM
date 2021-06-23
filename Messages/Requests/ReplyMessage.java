@@ -1,6 +1,8 @@
 package Messages.Requests;
 
-public class ReplyMessage {
+import java.io.Serializable;
+
+public class ReplyMessage implements Serializable {
     private User replyed ;
     private User replyer;
     private String text;
