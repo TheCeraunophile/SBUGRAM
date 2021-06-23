@@ -5,11 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import Messages.Requests.*;
 import java.io.IOException;
-import java.nio.channels.ClosedChannelException;
-
 import Client.Model.DetailsOfClient;
-import javafx.scene.text.Text;
-
 public class LoginController{
 
     private String password;
@@ -58,21 +54,16 @@ public class LoginController{
             this.password = password_field.getText();
             username=username_field.getText();
             Connect packet = new Connect(username,password);
-            try {
-                DetailsOfClient.oos.writeObject(packet);
-                DetailsOfClient.oos.flush();
-                var answer = DetailsOfClient.ois.readObject();
+                DetailsOfClient.writeObject(packet);
+                var answer = DetailsOfClient.readObject();
                 if (answer==null){
                     logOfFailed.setVisible(true);
                 }else {
                     DetailsOfClient.setProfile((User)answer);
+                    DetailsOfClient.setTarget((User) answer);
                     DetailsOfClient.setUsername(username);
                     nextPage();
                 }
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-                System.out.println(e.getMessage());
-            }
         }
     }
 
@@ -91,43 +82,42 @@ public class LoginController{
         name_hellp.setVisible(false);
         day_birthday.setVisible(false);
 
+        //username , password and Bio in necessary Not Date
         if (!username_field.getText().equals("") & !password_field.getText().equals("") & !bio_field.getText().equals("")){
+
             boolean allIsValid = true;
+
             if (logOfFailed.isVisible())
                 logOfFailed.setVisible(false);
             if (logOfUsernameFailed.isVisible())
                 logOfUsernameFailed.setVisible(false);
+
             this.username= username_field.getText();
             this.password=password_field.getText();
+
             //checking validation of username
-            //showed with allIsValid.
+            //showed with allIsValid boolean.
             int[] chek = new int[30];
             for (int i=0;i<username.length();i++){
                 chek[i] = username.charAt(i);
             }
             for (int s : chek) {
-                System.out.println((char) s);
                 if (!Character.isAlphabetic((char)s) & !Character.isDigit((char) s) & s!=32 & s!=95 & s!=0){
-                    System.out.println("failed");
                     logOfUsernameFailed.setVisible(true);
                     allIsValid=false;
                 }
             }
+
             if (allIsValid) {
                 CreatingAccount packet = new CreatingAccount(username, password, null, bio_field.getText());
-                try {
-                    DetailsOfClient.oos.writeObject(packet);
-                    DetailsOfClient.oos.flush();
-                    var answer = DetailsOfClient.ois.readObject();
-                    if (answer == null) {
-                        logOfFailed.setVisible(true);
-                    } else {
-                        DetailsOfClient.setProfile((User) answer);
-                        DetailsOfClient.setUsername(username);
-                        nextPage();
-                    }
-                } catch (IOException | ClassNotFoundException e) {
-                    e.printStackTrace();
+                DetailsOfClient.writeObject(packet);
+                var answer = DetailsOfClient.readObject();
+                if (answer == null) {
+                    logOfFailed.setVisible(true);
+                } else {
+                    DetailsOfClient.setProfile((User) answer);
+                    DetailsOfClient.setUsername(username);
+                    nextPage();
                 }
             }
         }
