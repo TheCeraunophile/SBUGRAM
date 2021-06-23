@@ -2,11 +2,10 @@ package Client.Controller;
 import Client.Model.DetailsOfClient;
 import Client.Model.PageLoader;
 import Messages.Requests.*;
-import Server.Databace.Databace;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
@@ -19,35 +18,62 @@ import java.util.Set;
 
 public class TimeLineController{
 
+    //for main menu
     public Button logout;
     public Button home;
     public Button direct;
     public Button profile;
     public Button writPost;
+    public ListView<Post> ListView;
+    private ArrayList<Post> timeLine ;
+
+    //for help to the searching
     public TextField textOfSearch;
     public Button startOfSearch;
     public Button clear;
+    public ListView<User> resultSearch ;
+
+    //every attempt for every post
     public Button like;
     public Button dislike;
-    public Button reply;
-    public ListView<Post> ListView;
-    private ArrayList<Post> timeLine = new ArrayList<>();
-    public ListView<User> resultSearch ;
-    private static boolean  inmainPage = true;
+    public Button comment;
+
+    //for show all of attempt for every post
+    public Label like_label;
+    public Label dislike_label;
+    public Label comment_label;
+    public Label number_like;
+    public Label number_dislike;
+    public Label number_comment;
+    public Button goToProfileOwner;
+
+    //for detect we clicked who on post?
     private static Post postTarget = null;
+
+    //for show we see some comment of one page or see our TimeLine
+    private static boolean  inmainPage = true;
 
     @FXML
     public void initialize() {
-        try {
-            System.out.println(DetailsOfClient.getProfile().getUsername());
-            System.out.println(DetailsOfClient.getProfile().getPassword());
-            for (int i=0;i<DetailsOfClient.profile.getPostList().size();i++){
-                System.out.println(DetailsOfClient.getProfile().getPostList().get(i).getText());
-            }
-        }catch (Exception e){}
+        timeLine = new ArrayList<>();
+        DetailsOfClient.settings();
+        ArrayList<User> followings = new ArrayList<>(DetailsOfClient.getProfile().getFollowing());
         for (int i=0;i<DetailsOfClient.profile.getFollowing().size();i++){
-            timeLine.addAll(DetailsOfClient.getProfile().getFollowing().get(i).getPostList());
+            timeLine.addAll(followings.get(i).getPostList());
         }
+        
+        //reverse sorting
+        int j ;
+        for (int i=0;i<timeLine.size()/2;i++){
+            j = timeLine.size()-i-1;
+            if (i>=j){
+                break;
+            }
+            Post temp = timeLine.get(i);
+            timeLine.set(i,timeLine.get(j));
+            timeLine.set(j,temp);
+        }
+        
         ListView.setItems(FXCollections.observableArrayList(timeLine));
         ListView.setCellFactory(ListView -> new PostItem());
         resultSearch.setVisible(false);
@@ -68,27 +94,52 @@ public class TimeLineController{
     }
 
     public void WritPost(){
-        DetailsOfClient.setTarget(DetailsOfClient.getProfile());
         try {
+            DetailsOfClient.setTarget(DetailsOfClient.getProfile());
             new PageLoader().load("AddPost");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    //home method like refresh in TimeLine
     public void home(){
         dislike.setVisible(false);
         like.setVisible(false);
-        reply.setVisible(false);
+        comment.setVisible(false);
+        number_comment.setVisible(false);
+        number_dislike.setVisible(false);
+        number_like.setVisible(false);
+        like_label.setVisible(false);
+        dislike_label.setVisible(false);
+        comment_label.setVisible(false);
+        goToProfileOwner.setVisible(false);
         try {
-            new PageLoader().load("TimeLine");
-        } catch (IOException e) {
+            String username = DetailsOfClient.getUsername();
+            String password = DetailsOfClient.getProfile().getPassword();
+            DetailsOfClient.oos.writeObject(new Disconnect(DetailsOfClient.getUsername()));
+            DetailsOfClient.oos.flush();
+            DetailsOfClient.closingSrc();
+            DetailsOfClient.init();
+            Connect packet = new Connect(username,password);
+            DetailsOfClient.oos.writeObject(packet);
+            DetailsOfClient.oos.flush();
+            var answer = DetailsOfClient.ois.readObject();
+            if (answer!=null){
+                DetailsOfClient.setProfile((User)answer);
+                DetailsOfClient.setUsername(username);
+                DetailsOfClient.settings();
+                new PageLoader().load("TimeLine");
+            }
+        }catch (ClassNotFoundException e){
+            e.getStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public void direct() {
-
+        // TODO: 23/06/2021  
     }
 
     public void profile(){
@@ -108,6 +159,16 @@ public class TimeLineController{
 
     public void Searching(){
         if (!textOfSearch.getText().equals("")){
+            dislike.setVisible(false);
+            like.setVisible(false);
+            comment.setVisible(false);
+            number_comment.setVisible(false);
+            number_dislike.setVisible(false);
+            number_like.setVisible(false);
+            like_label.setVisible(false);
+            dislike_label.setVisible(false);
+            comment_label.setVisible(false);
+            goToProfileOwner.setVisible(false);
             SearchMessage packet = new SearchMessage(textOfSearch.getText());
             try {
                 DetailsOfClient.oos.writeObject(packet);
@@ -160,9 +221,19 @@ public class TimeLineController{
         Post p = ListView.getSelectionModel().getSelectedItem();
         postTarget=p;
         if (p != null) {
+            number_like.setText(p.getLike().toString());
+            number_dislike.setText(p.getDisLike().toString());
+            number_comment.setText(p.getComment().toString());
             dislike.setVisible(true);
             like.setVisible(true);
-            reply.setVisible(true);
+            comment.setVisible(true);
+            number_comment.setVisible(true);
+            number_dislike.setVisible(true);
+            number_like.setVisible(true);
+            like_label.setVisible(true);
+            dislike_label.setVisible(true);
+            comment_label.setVisible(true);
+            goToProfileOwner.setVisible(true);
             DetailsOfClient.setTarget(p.getSender());
             try {
                 List<Post> temp = new ArrayList<>(p.getListReply());
@@ -177,9 +248,10 @@ public class TimeLineController{
 
     public void updateLikeOfPostIsOthers(){
         if (postTarget!=null){
-            LikeOrDislikeMessage packet = new LikeOrDislikeMessage(postTarget.getSender(),postTarget,0);
+            LikeOrDislikeMessage packet = new LikeOrDislikeMessage(postTarget.getSender(),postTarget,1);
             try {
                 DetailsOfClient.oos.writeObject(packet);
+                DetailsOfClient.oos.flush();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -188,9 +260,10 @@ public class TimeLineController{
 
     public void updateDislikeOfPostIsOthers(){
         if (postTarget!=null){
-            LikeOrDislikeMessage packet = new LikeOrDislikeMessage(postTarget.getSender(),postTarget,1);
+            LikeOrDislikeMessage packet = new LikeOrDislikeMessage(postTarget.getSender(),postTarget,0);
             try {
                 DetailsOfClient.oos.writeObject(packet);
+                DetailsOfClient.oos.flush();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -207,4 +280,14 @@ public class TimeLineController{
             }
         }
     }
+
+    public void goToProfileOfOwner(){
+        DetailsOfClient.setTarget(postTarget.getSender());
+        try {
+            new PageLoader().load("Profile");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
