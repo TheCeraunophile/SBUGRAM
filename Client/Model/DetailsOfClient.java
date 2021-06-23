@@ -1,10 +1,13 @@
 package Client.Model;
+import Messages.Requests.CompeerMessage;
+import Messages.Requests.CompeerType;
 import Messages.Requests.User;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class DetailsOfClient {
     public static ObjectOutputStream oos;
@@ -30,7 +33,7 @@ public class DetailsOfClient {
     }
 
     public static void setProfile(User prof) {
-        profile = prof;
+        DetailsOfClient.profile = prof;
     }
 
     public static String getUsername() {
@@ -59,5 +62,44 @@ public class DetailsOfClient {
         }
         profile=null;
         username=null;
+        target=null;
+    }
+
+    public static void settings(){
+        try {
+            ArrayList<User> temp = new ArrayList<>(DetailsOfClient.getProfile().getFollowing());
+            for (User user : temp) {
+                CompeerMessage packet = new CompeerMessage(DetailsOfClient.getProfile(), user.getUsername(), CompeerType.UNFOLLOW);
+                DetailsOfClient.oos.writeObject(packet);
+                DetailsOfClient.oos.flush();
+            }
+            for (User user : temp) {
+                String innerUsername = user.getUsername();
+                CompeerMessage packet = new CompeerMessage(DetailsOfClient.getProfile(), user.getUsername(), CompeerType.FOLLOW);
+                DetailsOfClient.oos.writeObject(packet);
+                DetailsOfClient.oos.flush();
+            }
+            System.err.println("done ;)");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void writeObject(Object obj){
+        try {
+            DetailsOfClient.oos.writeObject(obj);
+            oos.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static Object readObject(){
+        try {
+            return DetailsOfClient.ois.readObject();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
