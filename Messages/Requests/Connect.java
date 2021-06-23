@@ -5,10 +5,11 @@ public class Connect implements  Serializable {
 
     private final String username;
     private final String password;
-
-    public Connect(String username, String password) {
+    private final boolean update;
+    public Connect(String username, String password,boolean update) {
         this.username = username;
         this.password = password;
+        this.update = update;
     }
 
     public String getPassword() {
@@ -17,5 +18,9 @@ public class Connect implements  Serializable {
 
     public String getUsername() {
         return username;
+    }
+
+    public boolean getUpdate(){
+        return this.update;
     }
 }

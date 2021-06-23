@@ -99,14 +99,14 @@ public class ProfileController {
 
     public void startingOfFollow(){
         if (!DetailsOfClient.getProfile().equals(DetailsOfClient.getTarget())){
-            CompeerMessage packet = new CompeerMessage(DetailsOfClient.getProfile(),DetailsOfClient.getTarget().getUsername(), CompeerType.FOLLOW);
+            CompeerMessage packet = new CompeerMessage(DetailsOfClient.getProfile(),DetailsOfClient.getTarget().getUsername(), CompeerType.FOLLOW,false);
             sendingCompeerMessage(packet);
         }
     }
 
     public void endOfFollow(){
         if (!DetailsOfClient.getProfile().equals(DetailsOfClient.getTarget())){
-            CompeerMessage packet = new CompeerMessage(DetailsOfClient.getProfile(),DetailsOfClient.getTarget().getUsername(), CompeerType.UNFOLLOW);
+            CompeerMessage packet = new CompeerMessage(DetailsOfClient.getProfile(),DetailsOfClient.getTarget().getUsername(), CompeerType.UNFOLLOW,false);
             sendingCompeerMessage(packet);
         }
     }
@@ -222,7 +222,7 @@ public class ProfileController {
         DetailsOfClient.writeObject(new Disconnect(DetailsOfClient.getUsername()));
         DetailsOfClient.closingSrc();
         DetailsOfClient.init();
-        Connect packet = new Connect(username,password);
+        Connect packet = new Connect(username,password,true);
         DetailsOfClient.writeObject(packet);
         var answer = DetailsOfClient.readObject();
         if (answer!=null){

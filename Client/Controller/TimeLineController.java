@@ -121,7 +121,7 @@ public class TimeLineController{
             DetailsOfClient.oos.flush();
             DetailsOfClient.closingSrc();
             DetailsOfClient.init();
-            Connect packet = new Connect(username,password);
+            Connect packet = new Connect(username,password,true);
             DetailsOfClient.oos.writeObject(packet);
             DetailsOfClient.oos.flush();
             var answer = DetailsOfClient.ois.readObject();

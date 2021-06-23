@@ -105,6 +105,7 @@ class ClientHandler extends Thread {
                         String type1 = "UNFOLLOWED";
                         if (a.getCompeerType()==CompeerType.FOLLOW)
                             type1="START OF FOLLOW";
+                        if (!a.getUpdate())
                         System.err.println("SERVER SAID :\n" + a.getSender().getUsername() +  type1+" :" + a.getReceiver());
 
                     }
@@ -180,7 +181,7 @@ class ClientHandler extends Thread {
         String username=null;
         String password=null;
         String bio = null;
-
+        boolean update = true;
         if (user.getClass().getSimpleName().equalsIgnoreCase("CreatingAccount")){
             var a = (CreatingAccount)user;
             username = a.getUsername();
@@ -191,6 +192,7 @@ class ClientHandler extends Thread {
             var a = (Connect)user;
             username = a.getUsername();
             password = a.getPassword();
+            update = a.getUpdate();
         }
         if (user.getClass().getSimpleName().equalsIgnoreCase("DeletingAccount")){
             assert user instanceof DeletingAccount;
@@ -202,7 +204,12 @@ class ClientHandler extends Thread {
             if (databace.getInstance().get(username).getPassword().equals(password)) {
                 if (status.equalsIgnoreCase("connect")) {
                     sendingUser(databace.getInstance().get(username));
-                    System.err.println("SERVER SAID :\nACTION : LOGIN \nUSERNAME:" + username + "\nPASSWORD :" + password);
+                    if(update){
+                        System.err.println("SERVER SAID \nACTION : UPDATE \nUSERNAME :" + username);
+                    }
+                    else {
+                        System.err.println("SERVER SAID :\nACTION : LOGIN \nUSERNAME:" + username + "\nPASSWORD :" + password);
+                    }
                     ONLINEUSERNAME = username;
                 }
                 if (status.equalsIgnoreCase("deletingAccount")){

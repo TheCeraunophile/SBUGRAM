@@ -53,7 +53,7 @@ public class LoginController{
                 logOfUsernameFailed.setVisible(false);
             this.password = password_field.getText();
             username=username_field.getText();
-            Connect packet = new Connect(username,password);
+            Connect packet = new Connect(username,password,false);
                 DetailsOfClient.writeObject(packet);
                 var answer = DetailsOfClient.readObject();
                 if (answer==null){

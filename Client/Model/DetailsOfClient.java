@@ -69,13 +69,13 @@ public class DetailsOfClient {
         try {
             ArrayList<User> temp = new ArrayList<>(DetailsOfClient.getProfile().getFollowing());
             for (User user : temp) {
-                CompeerMessage packet = new CompeerMessage(DetailsOfClient.getProfile(), user.getUsername(), CompeerType.UNFOLLOW);
+                CompeerMessage packet = new CompeerMessage(DetailsOfClient.getProfile(), user.getUsername(), CompeerType.UNFOLLOW,true);
                 DetailsOfClient.oos.writeObject(packet);
                 DetailsOfClient.oos.flush();
             }
             for (User user : temp) {
                 String innerUsername = user.getUsername();
-                CompeerMessage packet = new CompeerMessage(DetailsOfClient.getProfile(), user.getUsername(), CompeerType.FOLLOW);
+                CompeerMessage packet = new CompeerMessage(DetailsOfClient.getProfile(), user.getUsername(), CompeerType.FOLLOW,true);
                 DetailsOfClient.oos.writeObject(packet);
                 DetailsOfClient.oos.flush();
             }
