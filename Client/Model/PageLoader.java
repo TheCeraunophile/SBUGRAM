@@ -24,7 +24,7 @@ public class PageLoader {
 
     public static void initStage(Stage primaryStage){
         stage=primaryStage;
-        primaryStage.setTitle("TextGram");
+        primaryStage.setTitle("SBUGram");
         stage.setWidth(width);
         stage.setHeight(height);
         stage.initStyle(StageStyle.DECORATED);
