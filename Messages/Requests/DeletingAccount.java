@@ -1,11 +1,13 @@
 package Messages.Requests;
 
-public class DelitingAccount {
+import java.io.Serializable;
+
+public class DeletingAccount implements Serializable {
 
     private final String username;
     private final String password;
 
-    public DelitingAccount(String username, String password) {
+    public DeletingAccount(String username, String password) {
         this.username = username;
         this.password = password;
     }
