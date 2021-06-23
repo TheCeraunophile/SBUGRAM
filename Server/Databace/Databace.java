@@ -17,8 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Databace implements Serializable{
     private static final File file = new File("/home/lunatic/Documents/Repository");
 
-    ObjectInputStream ois;
-    ObjectOutputStream oos;
+
     Repository repository = new Repository();
     public void pushingData(){
         try {
@@ -27,8 +26,9 @@ public class Databace implements Serializable{
             oos.flush();
             oos.close();
             System.out.println("works finished");
-            System.exit(0);
-        }catch (Exception e){}
+        }catch (Exception e){
+            System.out.println("exception");
+        }
     }
 
     public Databace (){
@@ -43,7 +43,10 @@ public class Databace implements Serializable{
             repository = (Repository) temp;
             ois.close();
             System.out.println("initialize finished");
-        }catch (Exception e){}
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            System.out.println("server cant read Information");
+        }
     }
 
     public  ConcurrentHashMap<String, User> getInstance(){
