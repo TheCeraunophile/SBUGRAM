@@ -9,19 +9,27 @@
 
 <AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Controller.ProfileController">
    <children>
-      <Button fx:id="back" layoutX="25.0" layoutY="508.0" mnemonicParsing="false" onAction="#backToTheTimeLine" text="Back" />
-      <Button fx:id="follow" layoutX="37.0" layoutY="216.0" mnemonicParsing="false" onAction="#startingOfFollow" prefHeight="25.0" prefWidth="75.0" text="Follow" visible="false" />
-      <Button fx:id="unfollow" layoutX="37.0" layoutY="216.0" mnemonicParsing="false" onAction="#endOfFollow" prefHeight="25.0" prefWidth="75.0" text="Unfollow" visible="false" />
-      <Button fx:id="Direct" layoutX="90.0" layoutY="508.0" mnemonicParsing="false" onAction="#goToCurrenrUserDirect" prefHeight="25.0" prefWidth="75.0" text="Direct" />
-      <Label fx:id="follower_number" layoutX="21.0" layoutY="122.0" prefHeight="25.0" prefWidth="58.0" text="follower" />
-      <Label fx:id="following_number" layoutX="128.0" layoutY="127.0" text="following" />
-      <ListView fx:id="listView" layoutX="250.0" layoutY="128.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#showPost" prefHeight="472.0" prefWidth="590.0" />
-      <ImageView fitHeight="128.0" fitWidth="590.0" layoutX="250.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fitHeight="88.0" fitWidth="89.0" layoutX="45.0" layoutY="17.0" pickOnBounds="true" preserveRatio="true" />
+      <Button fx:id="back" layoutX="25.0" layoutY="508.0" mnemonicParsing="false" onAction="#backToTheTimeLine" prefHeight="25.0" prefWidth="89.0" text="Back" />
+      <Button fx:id="follow" layoutX="261.0" layoutY="67.0" mnemonicParsing="false" onAction="#startingOfFollow" prefHeight="41.0" prefWidth="75.0" text="Follow" visible="false" />
+      <Button fx:id="unfollow" layoutX="261.0" layoutY="67.0" mnemonicParsing="false" onAction="#endOfFollow" prefHeight="41.0" prefWidth="75.0" text="Unfollow" visible="false" />
+      <Button fx:id="Direct" layoutX="114.0" layoutY="508.0" mnemonicParsing="false" onAction="#goToCurrentUserDirect" prefHeight="25.0" prefWidth="89.0" text="Direct" />
+      <Label fx:id="follower_number" layoutX="14.0" layoutY="122.0" onMouseClicked="#showFollowersList" prefHeight="25.0" prefWidth="58.0" text="follower" />
+      <Label fx:id="following_number" layoutX="178.0" layoutY="127.0" onMouseClicked="#shoFollowingList" text="following" />
+      <ListView fx:id="listView" layoutX="300.0" layoutY="123.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#showPost" prefHeight="472.0" prefWidth="590.0" />
+      <ImageView fitHeight="128.0" fitWidth="490.0" layoutX="350.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fitHeight="88.0" fitWidth="89.0" layoutX="14.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true" />
       <Label fx:id="numberOfFollower" layoutX="79.0" layoutY="127.0" text="0" />
-      <Label fx:id="numberOfFollowing" layoutX="198.0" layoutY="127.0" text="0" />
+      <Label fx:id="numberOfFollowing" layoutX="271.0" layoutY="127.0" text="0" />
       <Button fx:id="like" layoutX="176.0" layoutY="300.0" mnemonicParsing="false" onAction="#updateLike" prefHeight="25.0" prefWidth="62.0" text="Like" visible="false" />
       <Button fx:id="dislike" layoutX="176.0" layoutY="339.0" mnemonicParsing="false" onAction="#updateDislike" text="Dislike" visible="false" />
       <Button fx:id="reply" layoutX="176.0" layoutY="374.0" mnemonicParsing="false" onAction="#updateReply" prefHeight="25.0" prefWidth="62.0" text="Reply" visible="false" />
+      <ListView fx:id="followOrFollowingList" layoutX="13.0" layoutY="147.0" onMouseClicked="#shoProfileOfUser" prefHeight="355.0" prefWidth="262.0" visible="false" />
+      <Label fx:id="like_text" alignment="BOTTOM_LEFT" layoutX="16.0" layoutY="305.0" prefHeight="15.0" prefWidth="62.0" text="like" textAlignment="CENTER" visible="false" />
+      <Label fx:id="dislike_test" contentDisplay="TOP" layoutX="16.0" layoutY="344.0" prefHeight="15.0" prefWidth="62.0" text="dislike" visible="false" />
+      <Label fx:id="rep_test" layoutX="15.0" layoutY="379.0" text="Comment" visible="false" />
+      <Label fx:id="NUMBER_LIKE" layoutX="99.0" layoutY="305.0" prefHeight="15.0" prefWidth="59.0" text="0" visible="false" />
+      <Label fx:id="NUMBER_DISLIKE" layoutX="99.0" layoutY="344.0" prefHeight="15.0" prefWidth="59.0" text="0" visible="false" />
+      <Label fx:id="NUMBER_REP" layoutX="99.0" layoutY="379.0" prefHeight="15.0" prefWidth="59.0" text="0" visible="false" />
+      <Button fx:id="Refresh" layoutX="201.0" layoutY="508.0" mnemonicParsing="false" onAction="#Refresh" prefHeight="25.0" prefWidth="89.0" text="Refresh" />
    </children>
 </AnchorPane>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.scene.*?>
@@ -11,15 +12,25 @@
       <ListView fx:id="ListView" layoutX="333.0" layoutY="-3.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#showPost" prefHeight="606.0" prefWidth="561.0" />
       <Button fx:id="logout" layoutX="22.0" layoutY="527.0" mnemonicParsing="false" onAction="#logout" prefHeight="25.0" prefWidth="88.0" text="LogOut" />
       <Button fx:id="home" layoutX="242.0" layoutY="527.0" mnemonicParsing="false" onAction="#home" prefHeight="25.0" prefWidth="88.0" text="Home" />
-      <Button fx:id="direct" layoutX="125.0" layoutY="527.0" mnemonicParsing="false" onAction="#direct" prefHeight="25.0" prefWidth="88.0" text="Direct" />
+      <Button fx:id="direct" layoutX="115.0" layoutY="527.0" mnemonicParsing="false" onAction="#direct" prefHeight="25.0" prefWidth="116.0" text="Direct" />
       <Button fx:id="profile" layoutX="242.0" layoutY="493.0" mnemonicParsing="false" onAction="#profile" prefHeight="25.0" prefWidth="88.0" text="Profile" />
-      <TextField fx:id="textOfSearch" layoutX="87.0" layoutY="14.0" promptText="search" />
+      <TextField fx:id="textOfSearch" layoutX="40.0" layoutY="14.0" promptText="search" />
       <Button fx:id="writPost" layoutX="22.0" layoutY="493.0" mnemonicParsing="false" onAction="#WritPost" prefHeight="25.0" prefWidth="88.0" text="WritPost" />
-      <Button fx:id="startOfSearch" layoutX="114.0" layoutY="46.0" mnemonicParsing="false" onAction="#Searching" text="start searching" />
+      <Button fx:id="startOfSearch" layoutX="114.0" layoutY="493.0" mnemonicParsing="false" onAction="#Searching" text="start searching" />
       <ListView fx:id="resultSearch" layoutX="10.0" layoutY="46.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#showListUser" prefHeight="420.0" prefWidth="317.0" visible="false" />
-      <Button fx:id="clear" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#clearResultSearch" text="clear" visible="false" />
-      <Button fx:id="like" layoutX="265.0" layoutY="192.0" mnemonicParsing="false" onAction="#updateLikeOfPostIsOthers" prefHeight="25.0" prefWidth="59.0" text="like" visible="false" />
-      <Button fx:id="dislike" layoutX="265.0" layoutY="225.0" mnemonicParsing="false" onAction="#updateDislikeOfPostIsOthers" text="dislike" visible="false" />
-      <Button fx:id="reply" layoutX="264.0" layoutY="288.0" mnemonicParsing="false" onAction="#replyThisPost" prefHeight="25.0" prefWidth="59.0" text="reply" visible="false" />
+      <Button fx:id="clear" layoutX="116.0" layoutY="493.0" mnemonicParsing="false" onAction="#clearResultSearch" prefHeight="25.0" prefWidth="116.0" text="clear" visible="false" />
+      <Button fx:id="like" layoutX="248.0" layoutY="206.0" mnemonicParsing="false" onAction="#updateLikeOfPostIsOthers" prefHeight="25.0" prefWidth="76.0" text="like" visible="false" />
+      <Button fx:id="dislike" layoutX="248.0" layoutY="237.0" mnemonicParsing="false" onAction="#updateDislikeOfPostIsOthers" prefHeight="25.0" prefWidth="76.0" text="dislike" visible="false" />
+      <Button fx:id="comment" layoutX="248.0" layoutY="268.0" mnemonicParsing="false" onAction="#replyThisPost" prefHeight="25.0" prefWidth="76.0" text="comment" visible="false">
+         <font>
+            <Font size="12.0" />
+         </font></Button>
+      <Button fx:id="goToProfileOwner" layoutX="247.0" layoutY="300.0" mnemonicParsing="false" onAction="#goToProfileOfOwner" prefHeight="25.0" prefWidth="76.0" text="Profile" visible="false" />
+      <Label fx:id="like_label" layoutX="16.0" layoutY="211.0" text="like" visible="false" />
+      <Label fx:id="dislike_label" layoutX="16.0" layoutY="242.0" text="dislike" visible="false" />
+      <Label fx:id="comment_label" layoutX="16.0" layoutY="273.0" text="comments" visible="false" />
+      <Label fx:id="number_like" layoutX="156.0" layoutY="211.0" prefHeight="15.0" prefWidth="59.0" text="0" visible="false" />
+      <Label fx:id="number_dislike" layoutX="156.0" layoutY="242.0" prefHeight="15.0" prefWidth="59.0" text="0" visible="false" />
+      <Label fx:id="number_comment" layoutX="156.0" layoutY="273.0" prefHeight="15.0" prefWidth="59.0" text="0" visible="false" />
    </children>
 </Pane>

@@ -11,8 +11,8 @@
 <AnchorPane fx:id="root" prefHeight="100.0" prefWidth="561.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Label fx:id="username" layoutX="14.0" layoutY="7.0" prefHeight="15.0" prefWidth="81.0" text="username" textAlignment="RIGHT" />
-      <Label fx:id="title" layoutX="153.0" layoutY="7.0" prefHeight="15.0" prefWidth="73.0" text="title" textAlignment="CENTER" />
-      <Label fx:id="description" layoutX="19.0" layoutY="22.0" prefHeight="71.0" prefWidth="529.0" text="descreaption" textAlignment="JUSTIFY">
+      <Label fx:id="title" layoutX="153.0" layoutY="7.0" prefHeight="15.0" prefWidth="397.0" text="title" textAlignment="CENTER" />
+      <Label fx:id="description" alignment="TOP_LEFT" contentDisplay="TOP" layoutX="14.0" layoutY="22.0" prefHeight="71.0" prefWidth="529.0" text="descreaption">
          <font>
             <Font size="12.0" />
          </font></Label>
