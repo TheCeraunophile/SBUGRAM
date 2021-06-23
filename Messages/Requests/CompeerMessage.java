@@ -5,8 +5,8 @@ import java.io.Serializable;
 public class CompeerMessage implements Serializable {
     private final User sender;
     private final CompeerType compeerType;
-    private final User receiver ;
-    public CompeerMessage(User sender,User receiver,CompeerType compeerType){
+    private final String receiver ;
+    public CompeerMessage(User sender,String receiver,CompeerType compeerType){
         this.receiver=receiver;
         this.sender =sender;
         this.compeerType=compeerType;
@@ -16,7 +16,7 @@ public class CompeerMessage implements Serializable {
         return sender;
     }
 
-    public User getReceiver() {
+    public String getReceiver() {
         return receiver;
     }
 
