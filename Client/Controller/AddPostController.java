@@ -29,7 +29,7 @@ public class AddPostController {
             String username = DetailsOfClient.getUsername();
             String password = DetailsOfClient.getProfile().getPassword();
             User target = DetailsOfClient.getTarget();
-            DetailsOfClient.oos.writeObject(new Disconnect(DetailsOfClient.getUsername()));
+            DetailsOfClient.oos.writeObject(new Disconnect(DetailsOfClient.getUsername(),true));
             DetailsOfClient.oos.flush();
             DetailsOfClient.closingSrc();
             DetailsOfClient.init();

@@ -57,6 +57,9 @@ public class DetailsOfClient {
             oos.close();
             ois.close();
             socket.close();
+            DetailsOfClient.setTarget(null);
+            DetailsOfClient.setProfile(null);
+            DetailsOfClient.setUsername(null);
         } catch (IOException e) {
             e.printStackTrace();
         }

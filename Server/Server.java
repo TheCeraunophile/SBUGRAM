@@ -27,7 +27,6 @@ public class Server {
     }
 
     public synchronized static void timeOfPush(String sign){
-        System.out.println("in time of push");
         Integer integer = Server.numberOfConnectedClients;
         if (sign.equalsIgnoreCase("plus")) {
             try {
@@ -43,8 +42,8 @@ public class Server {
                 e.printStackTrace();
             }
         }
+        System.out.println("number is : "+Server.numberOfConnectedClients);
         if (Server.numberOfConnectedClients < 1){
-            System.out.println("0 shod");
             databace.pushingData();
         }
         // TODO: 20/06/2021 write databace in file system
@@ -55,7 +54,8 @@ class ClientHandler extends Thread {
     private ObjectInputStream ois ;
     private ObjectOutputStream oos;
     private static Databace databace;
-    String ONLINEUSERNAME= "UNKNOWN";
+    String ONLINEUSERNAME = null;
+    boolean forUpdate = true;
     public ClientHandler(Databace data,ObjectOutputStream oos,ObjectInputStream ois){
         this.oos=oos;
         this.ois=ois;
@@ -68,10 +68,22 @@ class ClientHandler extends Thread {
                 Object message = ois.readObject();
                 String type = message.getClass().getSimpleName();
                 if (type.equals(Disconnect.class.getSimpleName())){
+                    var a = (Disconnect) message;
+                    if (a.getUpdate()){
+                        //after this the log downed in connect message
+                    }
+                    else {
+                        forUpdate = false;
+                        if (a.getDisconnected()==null){
+                            System.err.println("SERVER SAID :\nClient close it's APP");
+                        }
+                        else {
+                            System.err.println("SERVER SAID :\nAction :LOGOUT\nUSERNAME :"+a.getDisconnected());
+                        }
+                    }
+                    Server.timeOfPush("minus");
                     oos.close();
                     ois.close();
-                    System.out.println("disconnect message received");
-                    Server.timeOfPush("minus");
                     break;
                 }
                 switch (type) {
@@ -144,8 +156,6 @@ class ClientHandler extends Thread {
                                 System.err.println("SERVER SAID :\nONE OF " + a.getResived().getUsername() + "'s POSTS DISLIKED"+"\nTime :"+new Date());
                             }
                             else {
-                                System.out.println("username of post is "+a.getResived().getUsername());
-                                System.out.println("text of post :"+a.getPost().getText());
                                 databace.getInstance().get(a.getResived().getUsername()).getPostList().get(targetPost).updateLike();
                                 System.err.println("SERVER SAID :\nONE OF " + a.getResived().getUsername() + "'s POSTS LIKED"+"\nTime :"+new Date());
                             }
@@ -155,12 +165,11 @@ class ClientHandler extends Thread {
                     }
                 }
             } catch (Exception e) {
-                System.err.println("SERVER SAID :\nCONNECTION FAILED :(");
+                Server.timeOfPush("minus");
+                System.err.println("SERVER SAID :\nClient close it's APP");
                 break;
             }
         }
-        System.err.println("SERVER SAID :\nLOGOUT :"+ONLINEUSERNAME);
-        ONLINEUSERNAME="UNKNOWN";
     }
 
     private void sendingUser(User user){

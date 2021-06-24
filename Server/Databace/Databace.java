@@ -19,13 +19,13 @@ public class Databace implements Serializable{
 
 
     Repository repository = new Repository();
-    public void pushingData(){
+    public synchronized void pushingData(){
         try {
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
             oos.writeObject(repository);
             oos.flush();
             oos.close();
-            System.out.println("works finished");
+            System.out.println("date saved successfully on fileSystem");
         }catch (Exception e){
             System.out.println("exception");
         }
@@ -42,7 +42,7 @@ public class Databace implements Serializable{
             Object temp = ois.readObject();
             repository = (Repository) temp;
             ois.close();
-            System.out.println("initialize finished");
+            System.out.println("initializing information finished");
         }catch (Exception e){
             System.out.println(e.getMessage());
             System.out.println("server cant read Information");

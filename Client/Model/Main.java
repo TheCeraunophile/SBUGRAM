@@ -14,11 +14,10 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        DetailsOfClient.init();
         launch(args);
 
         if (DetailsOfClient.getUsername()!=null) {
-            Disconnect disconnect = new Disconnect(DetailsOfClient.getUsername());
+            Disconnect disconnect = new Disconnect(DetailsOfClient.getUsername(),false);
             try {
                 DetailsOfClient.oos.writeObject(disconnect);
                 DetailsOfClient.oos.flush();
@@ -27,7 +26,7 @@ public class Main extends Application {
                 e.printStackTrace();
             }
         }else {
-            Disconnect disconnect = new Disconnect(null);
+            Disconnect disconnect = new Disconnect(null,false);
             try {
                 DetailsOfClient.oos.writeObject(disconnect);
                 DetailsOfClient.oos.flush();

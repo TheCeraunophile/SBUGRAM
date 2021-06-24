@@ -216,7 +216,7 @@ public class ProfileController {
         String username = DetailsOfClient.getUsername();
         String password = DetailsOfClient.getProfile().getPassword();
         String passwordTarget = DetailsOfClient.getTarget().getUsername();
-        DetailsOfClient.writeObject(new Disconnect(DetailsOfClient.getUsername()));
+        DetailsOfClient.writeObject(new Disconnect(DetailsOfClient.getUsername(),true));
         DetailsOfClient.closingSrc();
         DetailsOfClient.init();
         Connect packet = new Connect(username,password,true);

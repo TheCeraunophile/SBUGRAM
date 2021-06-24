@@ -71,11 +71,10 @@ public class TimeLineController{
 
     public void logout(){
         try {
-            Disconnect disconnect = new Disconnect(DetailsOfClient.getUsername());
+            Disconnect disconnect = new Disconnect(DetailsOfClient.getUsername(),false);
             DetailsOfClient.oos.writeObject(disconnect);
             DetailsOfClient.oos.flush();
             DetailsOfClient.closingSrc();
-            DetailsOfClient.init();
             new PageLoader().load("Login");
         } catch (IOException e) {
             e.printStackTrace();
@@ -106,7 +105,7 @@ public class TimeLineController{
         try {
             String username = DetailsOfClient.getUsername();
             String password = DetailsOfClient.getProfile().getPassword();
-            DetailsOfClient.oos.writeObject(new Disconnect(DetailsOfClient.getUsername()));
+            DetailsOfClient.oos.writeObject(new Disconnect(DetailsOfClient.getUsername(),true));
             DetailsOfClient.oos.flush();
             DetailsOfClient.closingSrc();
             DetailsOfClient.init();
@@ -231,10 +230,6 @@ public class TimeLineController{
                 ListView.setCellFactory(ListView -> new PostItem());
             } catch (Exception e) {
                 e.printStackTrace();
-            }
-            //just for test
-            if (p.getComments().size()>0){
-                System.out.println(p.getComments().get(0).getText()+ "  "+ p.getComments().get(0).getSender().getUsername());
             }
         }
     }

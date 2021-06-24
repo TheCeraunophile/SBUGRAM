@@ -2,6 +2,7 @@ package Client.Controller;
 import Messages.Requests.User;
 import Client.Model.PageLoader;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import Messages.Requests.*;
 import java.io.IOException;
@@ -27,6 +28,11 @@ public class LoginController{
     public CheckBox showPasswordButton;
     public Label logOfFailed;
     public Label logOfUsernameFailed;
+
+    @FXML
+    public void initialize(){
+        DetailsOfClient.init();
+    }
 
     /**
      * hiding field not related to login like needhellp and signup
