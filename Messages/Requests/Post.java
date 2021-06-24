@@ -2,27 +2,29 @@ package Messages.Requests;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 public class Post implements Serializable {
 
     private final User sender;
     private final String text;
-    private Integer comment;
+    private Integer NUMBER_COMMENTS;
     private Integer like;
     private Integer disLike;
-    private final List<Post> replysOfPost = new ArrayList<>();
-
+    private final List<Post> comments = new ArrayList<>();
+    private final Date publishDate ;
     public Post(User sender,String text){
         this.sender=sender;
         this.text=text;
         like=0;
         disLike=0;
-        comment=0;
+        NUMBER_COMMENTS =0;
+        publishDate = new Date();
     }
 
-    public void addReply(Post post){
-        replysOfPost.add(post);
-        comment++;
+    public void addComment(Post post){
+        comments.add(post);
+        NUMBER_COMMENTS = comments.size();
     }
 
     public void updateDisLike(){
@@ -41,8 +43,8 @@ public class Post implements Serializable {
         return sender;
     }
 
-    public List<Post> getListReply(){
-        return replysOfPost;
+    public List<Post> getComments(){
+        return comments;
     }
 
     public Integer getDisLike() {
@@ -53,8 +55,12 @@ public class Post implements Serializable {
         return like;
     }
 
-    public Integer getComment() {
-        return comment;
+    public Integer getNUMBER_COMMENTS() {
+        return NUMBER_COMMENTS;
+    }
+
+    public Date getPublishDate() {
+        return publishDate;
     }
 
     @Override

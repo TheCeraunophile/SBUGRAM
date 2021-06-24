@@ -11,10 +11,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class TimeLineController{
 
@@ -25,7 +23,7 @@ public class TimeLineController{
     public Button profile;
     public Button writPost;
     public ListView<Post> ListView;
-    private ArrayList<Post> timeLine ;
+    private List<Post> timeLine ;
 
     //for help to the searching
     public TextField textOfSearch;
@@ -36,15 +34,15 @@ public class TimeLineController{
     //every attempt for every post
     public Button like;
     public Button dislike;
-    public Button comment;
+    public Button AddComment;
 
     //for show all of attempt for every post
-    public Label like_label;
-    public Label dislike_label;
-    public Label comment_label;
-    public Label number_like;
-    public Label number_dislike;
-    public Label number_comment;
+    public Label LIKE_TEXT;
+    public Label NUMBER_LIKE;
+    public Label DISLIKE_TEXT;
+    public Label NUMBER_DISLIKE;
+    public Label COMMENT_TEXT;
+    public Label NUMBER_COM;
     public Button goToProfileOwner;
 
     //for detect we clicked who on post?
@@ -63,17 +61,8 @@ public class TimeLineController{
         }
         
         //reverse sorting
-        int j ;
-        for (int i=0;i<timeLine.size()/2;i++){
-            j = timeLine.size()-i-1;
-            if (i>=j){
-                break;
-            }
-            Post temp = timeLine.get(i);
-            timeLine.set(i,timeLine.get(j));
-            timeLine.set(j,temp);
-        }
-        
+        timeLine = timeLine.stream().sorted(Comparator.comparing(Post::getPublishDate).reversed()).collect(Collectors.toList());
+
         ListView.setItems(FXCollections.observableArrayList(timeLine));
         ListView.setCellFactory(ListView -> new PostItem());
         resultSearch.setVisible(false);
@@ -106,13 +95,13 @@ public class TimeLineController{
     public void home(){
         dislike.setVisible(false);
         like.setVisible(false);
-        comment.setVisible(false);
-        number_comment.setVisible(false);
-        number_dislike.setVisible(false);
-        number_like.setVisible(false);
-        like_label.setVisible(false);
-        dislike_label.setVisible(false);
-        comment_label.setVisible(false);
+        AddComment.setVisible(false);
+        NUMBER_COM.setVisible(false);
+        NUMBER_DISLIKE.setVisible(false);
+        NUMBER_LIKE.setVisible(false);
+        LIKE_TEXT.setVisible(false);
+        DISLIKE_TEXT.setVisible(false);
+        COMMENT_TEXT.setVisible(false);
         goToProfileOwner.setVisible(false);
         try {
             String username = DetailsOfClient.getUsername();
@@ -161,13 +150,13 @@ public class TimeLineController{
         if (!textOfSearch.getText().equals("")){
             dislike.setVisible(false);
             like.setVisible(false);
-            comment.setVisible(false);
-            number_comment.setVisible(false);
-            number_dislike.setVisible(false);
-            number_like.setVisible(false);
-            like_label.setVisible(false);
-            dislike_label.setVisible(false);
-            comment_label.setVisible(false);
+            AddComment.setVisible(false);
+            NUMBER_COM.setVisible(false);
+            NUMBER_DISLIKE.setVisible(false);
+            NUMBER_LIKE.setVisible(false);
+            LIKE_TEXT.setVisible(false);
+            DISLIKE_TEXT.setVisible(false);
+            COMMENT_TEXT.setVisible(false);
             goToProfileOwner.setVisible(false);
             SearchMessage packet = new SearchMessage(textOfSearch.getText());
             try {
@@ -221,27 +210,31 @@ public class TimeLineController{
         Post p = ListView.getSelectionModel().getSelectedItem();
         postTarget=p;
         if (p != null) {
-            number_like.setText(p.getLike().toString());
-            number_dislike.setText(p.getDisLike().toString());
-            number_comment.setText(p.getComment().toString());
+            NUMBER_LIKE.setText(p.getLike().toString());
+            NUMBER_DISLIKE.setText(p.getDisLike().toString());
+            NUMBER_COM.setText(p.getNUMBER_COMMENTS().toString());
             dislike.setVisible(true);
             like.setVisible(true);
-            comment.setVisible(true);
-            number_comment.setVisible(true);
-            number_dislike.setVisible(true);
-            number_like.setVisible(true);
-            like_label.setVisible(true);
-            dislike_label.setVisible(true);
-            comment_label.setVisible(true);
+            AddComment.setVisible(true);
+            NUMBER_COM.setVisible(true);
+            NUMBER_DISLIKE.setVisible(true);
+            NUMBER_LIKE.setVisible(true);
+            LIKE_TEXT.setVisible(true);
+            DISLIKE_TEXT.setVisible(true);
+            COMMENT_TEXT.setVisible(true);
             goToProfileOwner.setVisible(true);
             DetailsOfClient.setTarget(p.getSender());
             try {
-                List<Post> temp = new ArrayList<>(p.getListReply());
+                List<Post> temp = new ArrayList<>(p.getComments());
                 temp.add(0,p);
                 ListView.setItems(FXCollections.observableArrayList(temp));
                 ListView.setCellFactory(ListView -> new PostItem());
             } catch (Exception e) {
                 e.printStackTrace();
+            }
+            //just for test
+            if (p.getComments().size()>0){
+                System.out.println(p.getComments().get(0).getText()+ "  "+ p.getComments().get(0).getSender().getUsername());
             }
         }
     }

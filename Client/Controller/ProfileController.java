@@ -11,7 +11,9 @@ import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ProfileController {
 
@@ -45,14 +47,14 @@ public class ProfileController {
     //for every post
     public Button like;
     public Button dislike;
-    public Button reply;
-    public Label NUMBER_LIKE;
-    public Label NUMBER_DISLIKE;
-    public Label NUMBER_REP;
+    public Button AddComment;
     //---
-    public Label like_text;
-    public Label dislike_test;
-    public Label rep_test;
+    public Label LIKE_TEXT;
+    public Label NUMBER_LIKE;
+    public Label DISLIKE_TEXT;
+    public Label NUMBER_DISLIKE;
+    public Label COMMENT_TEXT;
+    public Label NUMBER_COM;
 
     @FXML
     public void initialize() {
@@ -65,17 +67,8 @@ public class ProfileController {
         }
         numberOfFollower.setText(Integer.toString(DetailsOfClient.getTarget().getFollower().size()));
         numberOfFollowing.setText(Integer.toString(DetailsOfClient.getTarget().getFollowing().size()));
-        ArrayList<Post> profile = new ArrayList<>(DetailsOfClient.getTarget().getPostList());
-        int j ;
-        for (int i=0;i<profile.size()/2;i++){
-            j = profile.size()-i-1;
-            if (i>=j){
-                break;
-            }
-            Post temp = profile.get(i);
-            profile.set(i,profile.get(j));
-            profile.set(j,temp);
-        }
+        List<Post> profile = new ArrayList<>(DetailsOfClient.getTarget().getPostList());
+        profile = profile.stream().sorted(Comparator.comparing(Post::getPublishDate).reversed()).collect(Collectors.toList());
         listView.setItems(FXCollections.observableArrayList(profile));
         listView.setCellFactory(ListView -> new PostItem());
     }
@@ -83,12 +76,12 @@ public class ProfileController {
     public void backToTheTimeLine(){
         like.setVisible(false);
         dislike.setVisible(false);
-        reply.setVisible(false);
+        AddComment.setVisible(false);
         follow.setVisible(false);
         unfollow.setVisible(false);
-        like_text.setVisible(false);
-        dislike_test.setVisible(false);
-        rep_test.setVisible(false);
+        LIKE_TEXT.setVisible(false);
+        DISLIKE_TEXT.setVisible(false);
+        COMMENT_TEXT.setVisible(false);
         if(inMainPage) {
             goToPage("TimeLine");
         }else {
@@ -124,16 +117,16 @@ public class ProfileController {
             inMainPage =false;
             like.setVisible(true);
             dislike.setVisible(true);
-            reply.setVisible(true);
+            AddComment.setVisible(true);
             NUMBER_DISLIKE.setVisible(true);
             NUMBER_LIKE.setVisible(true);
-            NUMBER_REP.setVisible(true);
-            like_text.setVisible(true);
-            dislike_test.setVisible(true);
-            rep_test.setVisible(true);
+            NUMBER_COM.setVisible(true);
+            LIKE_TEXT.setVisible(true);
+            DISLIKE_TEXT.setVisible(true);
+            COMMENT_TEXT.setVisible(true);
             DetailsOfClient.setTarget(post.getSender());
             try {
-                List<Post> temp = new ArrayList<>(post.getListReply());
+                List<Post> temp = new ArrayList<>(post.getComments());
                 temp.add(0,post);
                 listView.setItems(FXCollections.observableArrayList(temp));
                 listView.setCellFactory(ListView -> new PostItem());
@@ -157,7 +150,7 @@ public class ProfileController {
         }
     }
 
-    public void updateReply(){
+    public void addAComment(){
         if (post!=null){
             DetailsOfClient.setTarget(post.getSender());
             goToPage("AddPost");
@@ -167,6 +160,10 @@ public class ProfileController {
     public void goToCurrentUserDirect(){
         // TODO: 23/06/2021
     }
+
+    /**
+     * get post used when we want to add a comment under one selected post and called in AdPostController
+     * */
 
     public static Post getPost() {
         return post;
@@ -180,7 +177,7 @@ public class ProfileController {
     public void showFollowersList(){
         cleanDetailsOfPost();
         followOrFollowingList.setVisible(true);
-        ArrayList<User> followOrFollowingArrayList = new ArrayList<>(DetailsOfClient.getProfile().getFollower());
+        ArrayList<User> followOrFollowingArrayList = new ArrayList<>(DetailsOfClient.getProfile().getFollowing());
         followOrFollowingList.setItems(FXCollections.observableArrayList(followOrFollowingArrayList));
         followOrFollowingList.setCellFactory(resultSearch -> new UserItem());
     }
@@ -188,7 +185,7 @@ public class ProfileController {
     public void shoFollowingList(){
         cleanDetailsOfPost();
         followOrFollowingList.setVisible(true);
-        ArrayList<User> followOrFollowingArrayList = new ArrayList<>(DetailsOfClient.getProfile().getFollowing());
+        ArrayList<User> followOrFollowingArrayList = new ArrayList<>(DetailsOfClient.getProfile().getFollower());
         followOrFollowingList.setItems(FXCollections.observableArrayList(followOrFollowingArrayList));
         followOrFollowingList.setCellFactory(resultSearch -> new UserItem());
     }
@@ -197,13 +194,13 @@ public class ProfileController {
         inMainPage =true;
         like.setVisible(false);
         dislike.setVisible(false);
-        reply.setVisible(false);
+        AddComment.setVisible(false);
         NUMBER_DISLIKE.setVisible(false);
         NUMBER_LIKE.setVisible(false);
-        NUMBER_REP.setVisible(false);
-        like_text.setVisible(false);
-        dislike_test.setVisible(false);
-        rep_test.setVisible(false);
+        NUMBER_COM.setVisible(false);
+        LIKE_TEXT.setVisible(false);
+        DISLIKE_TEXT.setVisible(false);
+        COMMENT_TEXT.setVisible(false);
     }
 
     public void shoProfileOfUser(){

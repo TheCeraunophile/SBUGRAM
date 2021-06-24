@@ -19,7 +19,7 @@ public class AddPostController {
             if (DetailsOfClient.getTarget().equals(DetailsOfClient.getProfile())){
                 creatingPost();
             }else {
-                creatingRep();
+                creatingComment();
             }
         }
     }
@@ -83,13 +83,13 @@ public class AddPostController {
         goToBack("TimeLine");
     }
 
-    private void creatingRep(){
-        ReplyMessage packet ;
+    private void creatingComment(){
+        CommentMessage packet ;
         if (!titleOfPost.getText().equals("")){
-            packet = new ReplyMessage(ProfileController.getPost(),DetailsOfClient.getTarget(),DetailsOfClient.getProfile(),titleOfPost.getText()+"\n"+textOfPost.getText());
+            packet = new CommentMessage(ProfileController.getPost(),DetailsOfClient.getTarget(),DetailsOfClient.getProfile(),titleOfPost.getText()+"\n"+textOfPost.getText());
         }
         else {
-            packet = new ReplyMessage(ProfileController.getPost(),DetailsOfClient.getTarget(),DetailsOfClient.getProfile(),textOfPost.getText());
+            packet = new CommentMessage(ProfileController.getPost(),DetailsOfClient.getTarget(),DetailsOfClient.getProfile(),textOfPost.getText());
         }
         try {
             DetailsOfClient.oos.writeObject(packet);

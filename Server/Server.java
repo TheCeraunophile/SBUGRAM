@@ -5,6 +5,7 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import Messages.Requests.User;
 import Messages.Requests.*;
@@ -78,7 +79,7 @@ class ClientHandler extends Thread {
                         checkDetailsOfClients(message,"connect");
                     }
                     case "CreatingAccount" -> {//with its log
-                        checkDetailsOfClients(message,"creatingaccount");
+                        checkDetailsOfClients(message,"CreatingAccount");
                     }
                     case "DeletingAccount" -> {//with its log
                         checkDetailsOfClients(message,"deletingAccount");
@@ -91,12 +92,12 @@ class ClientHandler extends Thread {
                     case "PostMessage" -> {//with its log
                         var a = (PostMessage) message;
                         databace.getInstance().get(a.getUsernameSender()).updatePost(a.getText());
-                        System.err.println("SERVER SAUD :\n" + a.getUsernameSender() + " SEND NEW POST\nTEXT :" + a.getText());
+                        System.err.println("SERVER SAUD :\n" + a.getUsernameSender() + " SEND NEW POST\nTEXT :" + a.getText()+"\nTime :"+new Date());
                     }
                     case "Refresh" -> {//with its log
                         var a = (Refresh) message;
                         sendingUser(databace.getInstance().get(a.getUsername()));
-                        System.err.println("SERVER SAID : \n"+a.getUsername()+" GET POSTS LIST");
+                        System.err.println("SERVER SAID : \n"+a.getUsername()+" GET POSTS LIST"+"\nTime :"+new Date());
                     }
                     case "CompeerMessage" -> {//with its log
                         var a = (CompeerMessage) message;
@@ -105,18 +106,22 @@ class ClientHandler extends Thread {
                         String type1 = "UNFOLLOWED";
                         if (a.getCompeerType()==CompeerType.FOLLOW)
                             type1="START OF FOLLOW";
-                        if (!a.getUpdate())
-                        System.err.println("SERVER SAID :\n" + a.getSender().getUsername() +  type1+" :" + a.getReceiver());
-
+                        if (!a.getUpdate()) {
+                            System.err.println("SERVER SAID :\n" + a.getSender().getUsername() + type1 + " :" + a.getReceiver() + "\nTime :" + new Date());
+                        }
+                        else {
+                            System.err.println("SERVER SAID \nACTION : UPDATE \nUSERNAME :" + a.getSender().getUsername()+"\nTime :"+new Date());
+                        }
                     }
-                    case "ReplyMessage" -> {//whit its log
-                        var a = (ReplyMessage)message;
-                        Post post = new Post(a.getReplyer(),a.getText());
-                        databace.getInstance().get(a.usernameOfReplayed()).getPostList()
+                    case "CommentMessage" -> {//whit its log
+                        var a = (CommentMessage)message;
+                        Post post = new Post(a.getCommentWriter(),a.getText());
+                        int numberPost = databace.getInstance().get(a.usernameOfPostWriter()).getPostList().indexOf(a.getPostTarget());
+                        databace.getInstance().get(a.usernameOfPostWriter()).getPostList()
                         .
-                        get( databace.getInstance().get(a.usernameOfReplayed()).getPostList().indexOf(a.getPost())).addReply(post);
-                        databace.getInstance().get(a.usernameOfReplayer()).updatePost(a.getText());
-                        System.err.println("SERVER SAID :\n" + a.getReplyer().getUsername() + "SEND REPLY FOR ONE POSTS OF :" + a.getReplyed().getUsername());
+                        get(numberPost).addComment(post);
+                        databace.getInstance().get(a.usernameOfCommentWriter()).updatePost(a.getText());
+                        System.err.println("SERVER SAID :\n" + a.getCommentWriter().getUsername() + "SEND REPLY FOR ONE POSTS OF :" + a.getPostWriter().getUsername()+"\nTime :"+new Date());
                     }
                     case "SearchMessage" -> {//without any log
                         var a = (SearchMessage) message;
@@ -136,13 +141,13 @@ class ClientHandler extends Thread {
                         try {
                             if (a.getGread()==0) {
                                 databace.getInstance().get(a.getResived().getUsername()).getPostList().get(targetPost).updateDisLike();
-                                System.err.println("SERVER SAID :\nONE OF " + a.getResived().getUsername() + "'s POSTS DISLIKED");
+                                System.err.println("SERVER SAID :\nONE OF " + a.getResived().getUsername() + "'s POSTS DISLIKED"+"\nTime :"+new Date());
                             }
                             else {
                                 System.out.println("username of post is "+a.getResived().getUsername());
                                 System.out.println("text of post :"+a.getPost().getText());
                                 databace.getInstance().get(a.getResived().getUsername()).getPostList().get(targetPost).updateLike();
-                                System.err.println("SERVER SAID :\nONE OF " + a.getResived().getUsername() + "'s POSTS LIKED");
+                                System.err.println("SERVER SAID :\nONE OF " + a.getResived().getUsername() + "'s POSTS LIKED"+"\nTime :"+new Date());
                             }
                         }catch (Exception e){
                             System.out.println(e.getMessage());
@@ -205,28 +210,28 @@ class ClientHandler extends Thread {
                 if (status.equalsIgnoreCase("connect")) {
                     sendingUser(databace.getInstance().get(username));
                     if(update){
-                        System.err.println("SERVER SAID \nACTION : UPDATE \nUSERNAME :" + username);
+                        System.err.println("SERVER SAID \nACTION : UPDATE \nUSERNAME :" + username+"\nTime :"+new Date());
                     }
                     else {
-                        System.err.println("SERVER SAID :\nACTION : LOGIN \nUSERNAME:" + username + "\nPASSWORD :" + password);
+                        System.err.println("SERVER SAID :\nACTION : LOGIN \nUSERNAME:" + username + "\nPASSWORD :" + password+"\nTime :"+new Date());
                     }
                     ONLINEUSERNAME = username;
                 }
                 if (status.equalsIgnoreCase("deletingAccount")){
                     databace.getInstance().remove(username);
                     sendingUser(new User(null,null,null,null));
-                    System.err.println("SERVER SAID :\nDELETE ACCOUNT : LOGIN \nUSERNAME:" + username + "\nPASSWORD :" + password);
+                    System.err.println("SERVER SAID :\nDELETE ACCOUNT : LOGIN \nUSERNAME:" + username + "\nPASSWORD :" + password+"\nTime :"+new Date());
                     ONLINEUSERNAME = "UNKNOWN";
                 }
                 if (status.equalsIgnoreCase("CreatingAccount")){
                     sendingUser(null); //means one person already used of this username and password OMG
-                    System.err.println("SERVER SAID : \nONE INVALID ATTEMPT FOR CONNECTING DROOPED");
+                    System.err.println("SERVER SAID : \nONE INVALID ATTEMPT FOR CONNECTING DROOPED"+"\nTime :"+new Date());
                 }
             }else {
                 sendingUser(null); //means one person already used of this username or
                                    //hwo want to clear it's account given wrong password or
                                    //hwo want to connect to the server given wrong password
-                System.err.println("SERVER SAID : \nONE INVALID ATTEMPT FOR CONNECTING DROOPED");
+                System.err.println("SERVER SAID : \nONE INVALID ATTEMPT FOR CONNECTING DROOPED"+"\nTime :"+new Date());
             }
         }
         else {
@@ -234,12 +239,12 @@ class ClientHandler extends Thread {
                 User newUser = new User(username, password, null, bio);
                 databace.getInstance().put(username, newUser);
                 sendingUser(newUser);
-                System.err.println("SERVER SAID :\nACTION : SIGNUP \nUSERNAME:" + username + "\nPASSWORD :" + password);
+                System.err.println("SERVER SAID :\nACTION : SIGNUP \nUSERNAME:" + username + "\nPASSWORD :" + password+"\nTime :"+new Date());
                 ONLINEUSERNAME = username;
             }else {
                 sendingUser(null); //hwo want to clear it's account given wrong username or
                                    //hwo want to connect to the server given wrong username
-                System.err.println("SERVER SAID : \nONE INVALID ATTEMPT FOR CONNECTING DROOPED");
+                System.err.println("SERVER SAID : \nONE INVALID ATTEMPT FOR CONNECTING DROOPED"+"\nTime :"+new Date());
             }
         }
     }

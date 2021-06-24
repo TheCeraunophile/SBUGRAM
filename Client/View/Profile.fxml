@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.scene.image.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
@@ -20,16 +21,19 @@
       <ImageView fitHeight="88.0" fitWidth="89.0" layoutX="14.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true" />
       <Label fx:id="numberOfFollower" layoutX="79.0" layoutY="127.0" text="0" />
       <Label fx:id="numberOfFollowing" layoutX="271.0" layoutY="127.0" text="0" />
-      <Button fx:id="like" layoutX="176.0" layoutY="300.0" mnemonicParsing="false" onAction="#updateLike" prefHeight="25.0" prefWidth="62.0" text="Like" visible="false" />
-      <Button fx:id="dislike" layoutX="176.0" layoutY="339.0" mnemonicParsing="false" onAction="#updateDislike" text="Dislike" visible="false" />
-      <Button fx:id="reply" layoutX="176.0" layoutY="374.0" mnemonicParsing="false" onAction="#updateReply" prefHeight="25.0" prefWidth="62.0" text="Reply" visible="false" />
+      <Button fx:id="like" layoutX="189.0" layoutY="300.0" mnemonicParsing="false" onAction="#updateLike" prefHeight="25.0" prefWidth="96.0" text="Like" visible="false" />
+      <Button fx:id="dislike" layoutX="190.0" layoutY="339.0" mnemonicParsing="false" onAction="#updateDislike" prefHeight="25.0" prefWidth="96.0" text="Dislike" visible="false" />
+      <Button fx:id="AddComment" layoutX="189.0" layoutY="374.0" mnemonicParsing="false" onAction="#addAComment" prefHeight="25.0" prefWidth="96.0" text="AddComment" visible="false">
+         <font>
+            <Font size="11.0" />
+         </font></Button>
       <ListView fx:id="followOrFollowingList" layoutX="13.0" layoutY="147.0" onMouseClicked="#shoProfileOfUser" prefHeight="355.0" prefWidth="262.0" visible="false" />
-      <Label fx:id="like_text" alignment="BOTTOM_LEFT" layoutX="16.0" layoutY="305.0" prefHeight="15.0" prefWidth="62.0" text="like" textAlignment="CENTER" visible="false" />
-      <Label fx:id="dislike_test" contentDisplay="TOP" layoutX="16.0" layoutY="344.0" prefHeight="15.0" prefWidth="62.0" text="dislike" visible="false" />
-      <Label fx:id="rep_test" layoutX="15.0" layoutY="379.0" text="Comment" visible="false" />
+      <Label fx:id="LIKE_TEXT" alignment="BOTTOM_LEFT" layoutX="16.0" layoutY="305.0" prefHeight="15.0" prefWidth="62.0" text="like" textAlignment="CENTER" visible="false" />
+      <Label fx:id="DISLIKE_TEXT" contentDisplay="TOP" layoutX="16.0" layoutY="344.0" prefHeight="15.0" prefWidth="62.0" text="dislike" visible="false" />
+      <Label fx:id="COMMENT_TEXT" layoutX="15.0" layoutY="379.0" text="Comment" visible="false" />
       <Label fx:id="NUMBER_LIKE" layoutX="99.0" layoutY="305.0" prefHeight="15.0" prefWidth="59.0" text="0" visible="false" />
       <Label fx:id="NUMBER_DISLIKE" layoutX="99.0" layoutY="344.0" prefHeight="15.0" prefWidth="59.0" text="0" visible="false" />
-      <Label fx:id="NUMBER_REP" layoutX="99.0" layoutY="379.0" prefHeight="15.0" prefWidth="59.0" text="0" visible="false" />
+      <Label fx:id="NUMBER_COM" layoutX="99.0" layoutY="379.0" prefHeight="15.0" prefWidth="59.0" text="0" visible="false" />
       <Button fx:id="Refresh" layoutX="201.0" layoutY="508.0" mnemonicParsing="false" onAction="#Refresh" prefHeight="25.0" prefWidth="89.0" text="Refresh" />
    </children>
 </AnchorPane>
